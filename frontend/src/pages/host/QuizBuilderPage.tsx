@@ -150,15 +150,20 @@ export const QuizBuilderPage = () => {
 
     setSaving(true);
     try {
+      console.log('Saving quiz:', { isEditMode, id, quiz });
       if (isEditMode) {
-        await quizApi.updateQuiz(id!, quiz);
+        const response = await quizApi.updateQuiz(id!, quiz);
+        console.log('Update response:', response);
         success('Quiz updated successfully!');
       } else {
-        await quizApi.createQuiz(quiz);
+        const response = await quizApi.createQuiz(quiz);
+        console.log('Create response:', response);
         success('Quiz created successfully!');
       }
       navigate('/dashboard');
     } catch (err: any) {
+      console.error('Save error:', err);
+      console.error('Error response:', err.response);
       const errorMessage = err.response?.data?.message || err.response?.data?.error || err.message || 'Failed to save quiz';
       error(errorMessage);
     } finally {
