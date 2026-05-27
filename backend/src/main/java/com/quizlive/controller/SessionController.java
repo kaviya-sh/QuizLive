@@ -71,4 +71,15 @@ public class SessionController {
             @PathVariable String roomCode) {
         return ResponseEntity.ok(sessionService.getLeaderboard(roomCode));
     }
+
+    @PostMapping("/{roomCode}/join")
+    public ResponseEntity<Map<String, Object>> joinSession(
+            @PathVariable String roomCode,
+            @RequestBody Map<String, String> request,
+            @AuthenticationPrincipal User user) {
+        String displayName = request.get("displayName");
+        String avatarEmoji = request.getOrDefault("avatarEmoji", "😊");
+        java.util.UUID userId = user != null ? user.getId() : null;
+        return ResponseEntity.ok(sessionService.joinSession(roomCode, displayName, avatarEmoji, userId));
+    }
 }
