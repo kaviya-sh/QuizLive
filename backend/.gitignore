@@ -5,8 +5,7 @@
 .env.*.local
 
 # Application properties with secrets
-application-prod.yml
-application-production.yml
+application-local.yml
 
 # IDE
 .idea/
