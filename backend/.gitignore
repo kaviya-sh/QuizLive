@@ -1,0 +1,35 @@
+# Environment variables
+.env
+.env.local
+.env.production
+.env.*.local
+
+# Application properties with secrets
+application-prod.yml
+application-production.yml
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets
+**/secrets/
+*.key
+*.pem

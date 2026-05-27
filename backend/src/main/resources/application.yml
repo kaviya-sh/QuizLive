@@ -1,0 +1,111 @@
+spring:
+  application:
+    name: quizlive
+
+  profiles:
+    active: dev
+
+  datasource:
+    url: jdbc:postgresql://localhost:5433/quizlive
+    username: quizlive
+    password: quizlive
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 30000
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+
+  flyway:
+    enabled: false
+    baseline-on-migrate: true
+    locations: classpath:db/migration
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      timeout: 60000ms
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: sparklo.team.in@gmail.com
+    password: cuckcgkrxtfhxmzo
+    from: sparklo.team.in@gmail.com
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+server:
+  port: 8081
+  error:
+    include-message: always
+
+jwt:
+  secret: dev-secret-key-minimum-32-characters-long-for-production-use-stronger
+  expiration-ms: 900000
+  refresh-expiration-ms: 604800000
+
+minio:
+  endpoint: http://localhost:9000
+  access-key: minioadmin
+  secret-key: minioadmin
+  bucket: quiz-media
+
+cloudinary:
+  cloud-name: Root
+  api-key: 436297689376546
+  api-secret: n_HqOp9_yYQc05a9ZyWqQGka4vY
+
+cors:
+  allowed-origins: http://localhost:3000
+
+websocket:
+  allowed-origins: http://localhost:3000
+
+app:
+  frontend:
+    url: ${FRONTEND_URL:http://localhost:5173}
+  google:
+    client-id: ${GOOGLE_CLIENT_ID:your-google-client-id}
+    client-secret: ${GOOGLE_CLIENT_SECRET:your-google-client-secret}
+    redirect-uri: ${GOOGLE_REDIRECT_URI:http://localhost:8081/api/auth/oauth2/callback/google}
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+logging:
+  level:
+    root: INFO
+    com.quizlive: DEBUG
