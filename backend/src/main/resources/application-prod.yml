@@ -80,18 +80,18 @@ cloudinary:
   api-secret: n_HqOp9_yYQc05a9ZyWqQGka4vY
 
 cors:
-  allowed-origins: ${CORS_ALLOWED_ORIGINS}
+  allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173}
 
 websocket:
-  allowed-origins: ${WEBSOCKET_ALLOWED_ORIGINS}
+  allowed-origins: ${WEBSOCKET_ALLOWED_ORIGINS:http://localhost:5173}
 
 app:
   frontend:
-    url: ${FRONTEND_URL}
+    url: ${FRONTEND_URL:http://localhost:5173}
   google:
     client-id: ${GOOGLE_CLIENT_ID:}
     client-secret: ${GOOGLE_CLIENT_SECRET:}
-    redirect-uri: ${GOOGLE_REDIRECT_URI}
+    redirect-uri: ${GOOGLE_REDIRECT_URI:http://localhost:8081/oauth2/callback/google}
 
 springdoc:
   api-docs:
