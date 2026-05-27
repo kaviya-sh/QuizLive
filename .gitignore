@@ -32,7 +32,6 @@ yarn-error.log*
 .env.development
 
 # Application config with secrets
-application-prod.yml
 application-local.yml
 
 # Dependencies
