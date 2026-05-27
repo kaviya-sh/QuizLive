@@ -28,7 +28,7 @@ export const RegisterPage = () => {
       console.log('Registration successful:', data);
       setAuth(data.user, data.accessToken);
       toast.success('Account created successfully!');
-      navigate(data.user.role === 'ROLE_HOST' ? '/dashboard' : '/join');
+      navigate(data.user.role === 'ROLE_HOST' ? '/dashboard' : '/participant/dashboard');
     } catch (error: any) {
       console.error('Registration error:', error);
       console.error('Error response:', error.response);
