@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { X, Volume2, VolumeX, Bell, BellOff, Eye, EyeOff, User, Mail, Building } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
+import { userApi } from '../api/userApi';
 import toast from 'react-hot-toast';
 
 interface HostSettingsProps {
@@ -17,9 +18,20 @@ export const HostSettings = ({ isOpen, onClose }: HostSettingsProps) => {
   const [notifications, setNotifications] = useState(true);
   const [showAnswers, setShowAnswers] = useState(true);
 
-  const handleSaveProfile = () => {
-    // TODO: Implement profile update API call
-    toast.success('Profile updated successfully!');
+  const handleSaveProfile = async () => {
+    try {
+      await userApi.updateProfile({ displayName, email });
+      // Update local auth store
+      if (user) {
+        useAuthStore.setState({
+          user: { ...user, displayName, email }
+        });
+      }
+      toast.success('Profile updated successfully!');
+      onClose();
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Failed to update profile');
+    }
   };
 
   if (!isOpen) return null;
