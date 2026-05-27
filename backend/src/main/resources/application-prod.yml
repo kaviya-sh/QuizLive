@@ -51,6 +51,7 @@ spring:
           connectiontimeout: 5000
           timeout: 5000
           writetimeout: 5000
+    test-connection: false
 
   servlet:
     multipart:
