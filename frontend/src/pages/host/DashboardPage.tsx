@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import { quizApi } from '../../api/quizApi';
 import { sessionApi } from '../../api/sessionApi';
 import { useAuthStore } from '../../store/authStore';
@@ -11,6 +11,7 @@ import { useNotificationStore } from '../../store/notificationStore';
 export const DashboardPage = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const location = useLocation();
   const { user } = useAuthStore();
   const { success, error } = useNotificationStore();
   const [quizzes, setQuizzes] = useState<Quiz[]>([]);
@@ -26,7 +27,7 @@ export const DashboardPage = () => {
     }
     loadQuizzes();
     loadActiveSessions();
-  }, []);
+  }, [searchParams, location.state]); // Reload when location state changes
 
   // Tick every second for the live session elapsed timer
   useEffect(() => {
