@@ -28,8 +28,12 @@ export const LoginPage = () => {
     setPasswordError('');
     setRoleError('');
 
+    console.log('Attempting login with:', { email, role });
+    console.log('API Base URL:', import.meta.env.VITE_API_BASE_URL);
+
     try {
       const { data } = await authApi.login({ email, password });
+      console.log('Login successful:', data);
       
       // Check if the role matches
       const userRole = data.user.role === 'ROLE_HOST' ? 'HOST' : 'PARTICIPANT';
@@ -43,6 +47,8 @@ export const LoginPage = () => {
       success('Welcome back!');
       navigate(data.user.role === 'ROLE_HOST' ? '/dashboard' : '/participant/dashboard');
     } catch (error: any) {
+      console.error('Login error:', error);
+      console.error('Error response:', error.response);
       const errorMessage = error.response?.data?.message || '';
       
       if (errorMessage.toLowerCase().includes('email') || errorMessage.toLowerCase().includes('user not found') || errorMessage.toLowerCase().includes('user does not exist')) {

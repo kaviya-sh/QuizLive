@@ -20,12 +20,18 @@ export const RegisterPage = () => {
     e.preventDefault();
     setLoading(true);
 
+    console.log('Attempting registration with:', { ...formData, password: '***' });
+    console.log('API Base URL:', import.meta.env.VITE_API_BASE_URL);
+
     try {
       const { data } = await authApi.register(formData);
+      console.log('Registration successful:', data);
       setAuth(data.user, data.accessToken);
       toast.success('Account created successfully!');
       navigate(data.user.role === 'ROLE_HOST' ? '/dashboard' : '/join');
     } catch (error: any) {
+      console.error('Registration error:', error);
+      console.error('Error response:', error.response);
       const errorMessage = error.response?.data?.message || error.message || 'Registration failed';
       toast.error(errorMessage);
     } finally {
