@@ -3,9 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { authApi } from '../../api/authApi';
 import { useAuthStore } from '../../store/authStore';
 import toast from 'react-hot-toast';
-import { ArrowRight, Users, Presentation, Mail, Lock, User, Sparkles } from 'lucide-react';
-
-const EMOJI_OPTIONS = ['😀', '😎', '🤓', '🥳', '🤩', '😊', '🚀', '⭐', '🎯', '🎨', '🎭', '🎪', '🎸', '🎮', '🏆', '💡'];
+import { Users, Presentation, Mail, Lock, User } from 'lucide-react';
 
 export const RegisterPage = () => {
   const navigate = useNavigate();
@@ -17,9 +15,6 @@ export const RegisterPage = () => {
     role: 'ROLE_HOST',
   });
   const [loading, setLoading] = useState(false);
-  const [quizCode, setQuizCode] = useState('');
-  const [participantName, setParticipantName] = useState('');
-  const [selectedEmoji, setSelectedEmoji] = useState('😀');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import confetti from 'canvas-confetti';
-import { Trophy, Share2, RotateCcw, Award, Target, TrendingUp, Crown, Home } from 'lucide-react';
+import { Trophy, Share2, Award, Target, TrendingUp, Crown, Home } from 'lucide-react';
 
 interface ResultData {
   rank: number;

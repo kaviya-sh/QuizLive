@@ -5,7 +5,6 @@ import { useHostSocket } from '../../hooks/useHostSocket';
 import { Session } from '../../types/api';
 import toast from 'react-hot-toast';
 import { Copy, QrCode, Users, Play, SkipForward, StopCircle, Wifi, WifiOff, CheckCircle2, BarChart3, Check } from 'lucide-react';
-import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Cell } from 'recharts';
 
 export const HostPanelPage = () => {
   const { roomCode } = useParams<{ roomCode: string }>();
@@ -196,11 +195,6 @@ export const HostPanelPage = () => {
       toast.error('Failed to end session');
     }
   };
-
-  const chartData = session?.currentQuestion?.options?.map(o => ({
-    name: o.text.substring(0, 20),
-    count: session.answerDistribution?.[o.id] || 0,
-  })) || [];
 
   const CHART_COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444'];
 

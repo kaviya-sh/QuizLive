@@ -34,10 +34,10 @@ export const useHostSessionsSocket = (onSessionFinished: () => void) => {
             }
           });
         },
-        onStompError: (frame) => {
+        onStompError: () => {
           // Silently handle STOMP errors
         },
-        onWebSocketError: (event) => {
+        onWebSocketError: () => {
           // Silently handle WebSocket errors
         },
         debug: () => {},

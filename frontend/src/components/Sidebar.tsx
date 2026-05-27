@@ -1,7 +1,6 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import { LucideIcon, LogOut, Settings } from 'lucide-react';
-import { useState } from 'react';
 
 interface NavItem {
   label: string;

@@ -51,7 +51,6 @@ export const SessionHistoryPage = () => {
 
   const finished = sessions.filter(s => s.status === 'FINISHED');
   const active   = sessions.filter(s => s.status === 'ACTIVE');
-  const waiting  = sessions.filter(s => s.status === 'WAITING');
 
   const totalParticipants = sessions.reduce((sum, s) => sum + (s.participantCount ?? 0), 0);
   const avgDuration = finished.length

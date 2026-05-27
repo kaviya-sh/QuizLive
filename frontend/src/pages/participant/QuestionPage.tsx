@@ -128,41 +128,27 @@ export const QuestionPage = () => {
     sendAnswer(question!.id, optionId);
   };
 
+  const CHART_COLORS = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444'];
+
   const getOptionStyle = (optionId: string, index: number) => {
-    const colors = [
-      { bg: '#3B82F6', hover: '#2563EB', ring: '#60A5FA', correct: '#10B981', wrong: '#EF4444' },
-      { bg: '#8B5CF6', hover: '#7C3AED', ring: '#A78BFA', correct: '#10B981', wrong: '#EF4444' },
-      { bg: '#F59E0B', hover: '#D97706', ring: '#FBBF24', correct: '#10B981', wrong: '#EF4444' },
-      { bg: '#EC4899', hover: '#DB2777', ring: '#F472B6', correct: '#10B981', wrong: '#EF4444' },
-    ];
-
-    const color = colors[index];
-
     // If feedback received, show correct answer in green and wrong in red
     if (feedback) {
       if (optionId === feedback.correctOptionId) {
-        return { background: color.correct }; // Always show correct answer in green
+        return { background: '#10B981' };
       }
       if (optionId === feedback.selectedOptionId && !feedback.isCorrect) {
-        return { background: color.wrong }; // Show selected wrong answer in red
+        return { background: '#EF4444' };
       }
     }
 
     // If selected but no feedback yet
     if (selectedOption === optionId && !feedback) {
-      return { background: color.bg, boxShadow: `0 0 0 4px ${color.ring}` };
+      return { background: CHART_COLORS[index], boxShadow: `0 0 0 4px ${CHART_COLORS[index]}40` };
     }
 
     // Default state
-    return answered ? { background: color.bg, opacity: 0.75 } : { background: color.bg };
+    return answered ? { background: CHART_COLORS[index], opacity: 0.75 } : { background: CHART_COLORS[index] };
   };
-
-  const colors = [
-    { bg: 'bg-blue-500', hover: 'hover:bg-blue-600', ring: 'ring-blue-400' },
-    { bg: 'bg-emerald-500', hover: 'hover:bg-emerald-600', ring: 'ring-emerald-400' },
-    { bg: 'bg-amber-500', hover: 'hover:bg-amber-600', ring: 'ring-amber-400' },
-    { bg: 'bg-rose-500', hover: 'hover:bg-rose-600', ring: 'ring-rose-400' },
-  ];
 
   // Waiting screen
   if (isWaiting) {

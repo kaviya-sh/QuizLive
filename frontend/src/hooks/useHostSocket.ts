@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
 import { useAuthStore } from '../store/authStore';
@@ -52,7 +52,7 @@ export const useHostSocket = (roomCode: string, onMessage: (message: any) => voi
           console.log('WebSocket disconnected');
           setConnected(false);
         },
-        onStompError: (frame) => {
+        onStompError: () => {
           // Silently handle STOMP errors
         },
         debug: () => {},

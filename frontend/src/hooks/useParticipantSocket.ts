@@ -5,7 +5,7 @@ import { Client } from '@stomp/stompjs';
 export const useParticipantSocket = (roomCode: string, onMessage: (message: any) => void) => {
   const clientRef = useRef<Client | null>(null);
   const [connected, setConnected] = useState(false);
-  const reconnectTimeoutRef = useRef<NodeJS.Timeout>();
+  const reconnectTimeoutRef = useRef<number>();
   const reconnectAttemptsRef = useRef(0);
   const maxReconnectAttempts = 5;
   const onMessageRef = useRef(onMessage);
@@ -80,7 +80,7 @@ export const useParticipantSocket = (roomCode: string, onMessage: (message: any)
             setConnected(false);
             isConnectingRef.current = false;
           },
-          onStompError: (frame) => {
+          onStompError: () => {
             // Silently handle STOMP errors
             setConnected(false);
             isConnectingRef.current = false;
@@ -88,12 +88,12 @@ export const useParticipantSocket = (roomCode: string, onMessage: (message: any)
             // Attempt reconnection
             if (reconnectAttemptsRef.current < maxReconnectAttempts) {
               reconnectAttemptsRef.current++;
-              reconnectTimeoutRef.current = setTimeout(() => {
+              reconnectTimeoutRef.current = window.setTimeout(() => {
                 connectWebSocket();
               }, 3000);
             }
           },
-          onWebSocketError: (error) => {
+          onWebSocketError: () => {
             // Silently handle WebSocket errors
             setConnected(false);
             isConnectingRef.current = false;

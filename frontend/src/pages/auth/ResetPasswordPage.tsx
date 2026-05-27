@@ -35,7 +35,7 @@ export const ResetPasswordPage = () => {
 
     setLoading(true);
     try {
-      await authApi.resetPassword({ token: token!, newPassword });
+      await authApi.resetPassword(token!, newPassword);
       toast.success('Password reset successful! Please login with your new password.');
       navigate('/login');
     } catch (error: any) {
