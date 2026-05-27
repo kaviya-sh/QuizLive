@@ -155,12 +155,14 @@ export const QuizBuilderPage = () => {
         const response = await quizApi.updateQuiz(id!, quiz);
         console.log('Update response:', response);
         success('Quiz updated successfully!');
+        // Small delay to show the success message before navigating
+        setTimeout(() => navigate('/dashboard'), 500);
       } else {
         const response = await quizApi.createQuiz(quiz);
         console.log('Create response:', response);
         success('Quiz created successfully!');
+        setTimeout(() => navigate('/dashboard'), 500);
       }
-      navigate('/dashboard');
     } catch (err: any) {
       console.error('Save error:', err);
       console.error('Error response:', err.response);
