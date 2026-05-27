@@ -2,6 +2,10 @@ spring:
   application:
     name: quizlive
 
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.mail.MailSenderAutoConfiguration
+
   datasource:
     url: jdbc:postgresql://ep-noisy-brook-aplc69tm.c-7.us-east-1.aws.neon.tech/quizlive_prod?sslmode=require
     username: neondb_owner
