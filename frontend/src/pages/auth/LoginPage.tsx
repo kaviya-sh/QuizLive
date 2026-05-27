@@ -66,7 +66,7 @@ export const LoginPage = () => {
 
     setSendingReset(true);
     try {
-      await authApi.forgotPassword({ email: forgotEmail });
+      await authApi.forgotPassword(forgotEmail);
       success('Password reset link sent to your email!');
       setShowForgotPassword(false);
       setForgotEmail('');

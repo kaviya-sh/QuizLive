@@ -8,17 +8,19 @@ export const ResetPasswordPage = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token');
+  const email = searchParams.get('email') || '';
+  const otp = searchParams.get('otp') || token || '';
   
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!token) {
+    if (!token && !otp) {
       toast.error('Invalid reset link');
       navigate('/login');
     }
-  }, [token, navigate]);
+  }, [token, otp, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,7 +37,7 @@ export const ResetPasswordPage = () => {
 
     setLoading(true);
     try {
-      await authApi.resetPassword(token!, newPassword);
+      await authApi.resetPassword(email, otp, newPassword);
       toast.success('Password reset successful! Please login with your new password.');
       navigate('/login');
     } catch (error: any) {
