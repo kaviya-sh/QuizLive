@@ -31,7 +31,8 @@ spring:
       host: rational-swan-78267.upstash.io
       port: 6379
       password: gQAAAAAAATG7AAIgcDJlZWU3ODliZjRjNDA0MjM4OTg2YjU2NjM1MjBjMWE3Ng
-      ssl: true
+      ssl:
+        enabled: true
       timeout: 60000ms
 
   mail:
