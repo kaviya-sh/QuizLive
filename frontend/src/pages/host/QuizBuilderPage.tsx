@@ -150,22 +150,31 @@ export const QuizBuilderPage = () => {
 
     setSaving(true);
     try {
-      console.log('Saving quiz:', { isEditMode, id, quiz });
+      console.log('=== SAVING QUIZ ===');
+      console.log('Mode:', isEditMode ? 'UPDATE' : 'CREATE');
+      console.log('Quiz ID:', id);
+      console.log('Quiz data being sent:', JSON.stringify(quiz, null, 2));
+      
       if (isEditMode) {
         const response = await quizApi.updateQuiz(id!, quiz);
-        console.log('Update response:', response);
+        console.log('=== UPDATE RESPONSE ===');
+        console.log('Status:', response.status);
+        console.log('Data:', JSON.stringify(response.data, null, 2));
         success('Quiz updated successfully!');
-        // Navigate with state to trigger dashboard refresh
         setTimeout(() => navigate('/dashboard', { state: { refresh: true } }), 500);
       } else {
         const response = await quizApi.createQuiz(quiz);
-        console.log('Create response:', response);
+        console.log('=== CREATE RESPONSE ===');
+        console.log('Status:', response.status);
+        console.log('Data:', JSON.stringify(response.data, null, 2));
         success('Quiz created successfully!');
         setTimeout(() => navigate('/dashboard', { state: { refresh: true } }), 500);
       }
     } catch (err: any) {
-      console.error('Save error:', err);
-      console.error('Error response:', err.response);
+      console.error('=== SAVE ERROR ===');
+      console.error('Error:', err);
+      console.error('Response:', err.response);
+      console.error('Response data:', err.response?.data);
       const errorMessage = err.response?.data?.message || err.response?.data?.error || err.message || 'Failed to save quiz';
       error(errorMessage);
     } finally {
