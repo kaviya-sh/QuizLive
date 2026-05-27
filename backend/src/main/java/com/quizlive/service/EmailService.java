@@ -1,29 +1,35 @@
 package com.quizlive.service;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
+@ConditionalOnProperty(name = "spring.mail.host")
 public class EmailService {
 
-    private final JavaMailSender mailSender;
+    @Autowired(required = false)
+    private JavaMailSender mailSender;
 
-    @Value("${spring.mail.username}")
+    @Value("${spring.mail.username:}")
     private String fromEmail;
 
-    @Value("${spring.mail.from:${spring.mail.username}}")
+    @Value("${spring.mail.from:${spring.mail.username:noreply@quizlive.com}}")
     private String fromAddress;
 
     @Value("${app.frontend.url:http://localhost:5173}")
     private String frontendUrl;
 
     public void sendPasswordResetEmail(String toEmail, String token) {
+        if (mailSender == null) {
+            log.warn("Mail sender not configured. Skipping password reset email to: {}", toEmail);
+            return;
+        }
         try {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setFrom(fromAddress);
@@ -46,11 +52,14 @@ public class EmailService {
             log.info("Password reset email sent to: {}", toEmail);
         } catch (Exception e) {
             log.error("Failed to send password reset email to: {}", toEmail, e);
-            throw new RuntimeException("Failed to send email", e);
         }
     }
 
     public void sendOtp(String toEmail, String otp) {
+        if (mailSender == null) {
+            log.warn("Mail sender not configured. Skipping OTP email to: {}", toEmail);
+            return;
+        }
         try {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setFrom(fromAddress);
@@ -70,7 +79,6 @@ public class EmailService {
             log.info("OTP email sent to: {}", toEmail);
         } catch (Exception e) {
             log.error("Failed to send OTP email to: {}", toEmail, e);
-            throw new RuntimeException("Failed to send OTP email", e);
         }
     }
 }
