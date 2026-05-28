@@ -273,7 +273,7 @@ export const HostPanelPage = () => {
             </button>
             
             {/* Room Code Card */}
-            <div className="flex items-center gap-3 px-6 py-3 hover-lift" style={{ background: '#10B981', borderRadius: '12px', boxShadow: '0 4px 12px rgba(16, 185, 129, 0.3)', transition: '0.3s ease', border: '1px solid #059669' }}>
+            <div className="flex items-center gap-3 px-6 py-3 hover-lift" style={{ background: 'rgba(255, 255, 255, 0.25)', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)', transition: '0.3s ease', border: '1px solid rgba(255, 255, 255, 0.3)', backdropFilter: 'blur(10px)' }}>
               <span style={{ fontSize: '24px', fontWeight: '700', letterSpacing: '2px', color: '#FFFFFF' }}>{roomCode}</span>
             </div>
             
@@ -281,7 +281,7 @@ export const HostPanelPage = () => {
             <button
               onClick={copyRoomCode}
               className="hover-lift"
-              style={{ width: '48px', height: '48px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(245, 158, 11, 0.3)', background: copied ? '#10B981' : '#F59E0B', border: copied ? '1px solid #059669' : '1px solid #D97706', transition: 'all 0.3s ease' }}
+              style={{ width: '48px', height: '48px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)', background: copied ? 'rgba(16, 185, 129, 0.2)' : 'rgba(255, 255, 255, 0.2)', border: '1px solid rgba(255, 255, 255, 0.3)', transition: 'all 0.3s ease', backdropFilter: 'blur(10px)' }}
               title={copied ? 'Copied!' : 'Copy Room Code'}
             >
               {copied ? (
@@ -295,7 +295,7 @@ export const HostPanelPage = () => {
             <button
               onClick={showQR}
               className="hover-lift flex items-center gap-2"
-              style={{ padding: '10px 16px', borderRadius: '12px', boxShadow: '0 2px 8px rgba(236, 72, 153, 0.3)', background: 'linear-gradient(135deg, #EC4899 0%, #D946EF 100%)', border: '1px solid #D946EF' }}
+              style={{ padding: '10px 16px', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)', background: 'rgba(255, 255, 255, 0.2)', border: '1px solid rgba(255, 255, 255, 0.3)', backdropFilter: 'blur(10px)' }}
               title="Show QR Code"
             >
               <QrCode className="w-4 h-4 text-white" />
