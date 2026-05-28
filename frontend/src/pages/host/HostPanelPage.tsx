@@ -266,14 +266,14 @@ export const HostPanelPage = () => {
             <button
               onClick={() => navigate('/dashboard')}
               className="hover-lift flex items-center justify-center"
-              style={{ width: '48px', height: '48px', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.2)', background: '#8b5cf6', border: '1px solid #7c3aed', transition: 'all 0.3s ease' }}
+              style={{ width: '48px', height: '48px', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.15)', background: 'linear-gradient(135deg, #f0abfc 0%, #e879f9 100%)', border: '1px solid #e879f9', transition: 'all 0.3s ease' }}
               title="Back to Dashboard"
             >
               <ArrowLeft className="w-5 h-5 text-white" />
             </button>
             
             {/* Room Code Card */}
-            <div className="flex items-center gap-3 px-6 py-3 hover-lift" style={{ background: '#06b6d4', borderRadius: '12px', boxShadow: '0 4px 12px rgba(6, 182, 212, 0.3)', transition: '0.3s ease', border: '1px solid #0891b2' }}>
+            <div className="flex items-center gap-3 px-6 py-3 hover-lift" style={{ background: 'linear-gradient(135deg, #67e8f9 0%, #22d3ee 100%)', borderRadius: '12px', boxShadow: '0 4px 12px rgba(34, 211, 238, 0.25)', transition: '0.3s ease', border: '1px solid #22d3ee' }}>
               <span style={{ fontSize: '24px', fontWeight: '700', letterSpacing: '2px', color: '#FFFFFF' }}>{roomCode}</span>
             </div>
             
@@ -281,7 +281,7 @@ export const HostPanelPage = () => {
             <button
               onClick={copyRoomCode}
               className="hover-lift"
-              style={{ width: '48px', height: '48px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.2)', background: copied ? '#10b981' : '#f59e0b', border: copied ? '1px solid #059669' : '1px solid #d97706', transition: 'all 0.3s ease' }}
+              style={{ width: '48px', height: '48px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.15)', background: copied ? 'linear-gradient(135deg, #86efac 0%, #4ade80 100%)' : 'linear-gradient(135deg, #fde047 0%, #facc15 100%)', border: copied ? '1px solid #4ade80' : '1px solid #facc15', transition: 'all 0.3s ease' }}
               title={copied ? 'Copied!' : 'Copy Room Code'}
             >
               {copied ? (
@@ -295,7 +295,7 @@ export const HostPanelPage = () => {
             <button
               onClick={showQR}
               className="hover-lift flex items-center gap-2"
-              style={{ padding: '10px 16px', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.2)', background: '#ec4899', border: '1px solid #db2777' }}
+              style={{ padding: '10px 16px', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.15)', background: 'linear-gradient(135deg, #fb923c 0%, #f97316 100%)', border: '1px solid #f97316' }}
               title="Show QR Code"
             >
               <QrCode className="w-4 h-4 text-white" />
@@ -348,10 +348,10 @@ export const HostPanelPage = () => {
 
       <div className="flex h-[calc(100vh-89px)] gap-6 p-6">
         {/* Left Panel - Question Progress */}
-        <div className="w-80 rounded-2xl p-6 overflow-y-auto" style={{ background: 'linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%)', boxShadow: '0 4px 12px rgba(59, 130, 246, 0.15)', border: '1px solid #93c5fd' }}>
+        <div className="w-80 rounded-2xl p-6 overflow-y-auto" style={{ background: 'linear-gradient(135deg, #eff6ff 0%, #e0f2fe 100%)', boxShadow: '0 4px 12px rgba(59, 130, 246, 0.08)', border: '1px solid #bfdbfe' }}>
           <div className="flex items-center gap-2 mb-6">
-            <CheckCircle2 className="w-6 h-6 text-blue-700" />
-            <h3 className="text-xl font-bold text-blue-900">Question Progress</h3>
+            <CheckCircle2 className="w-6 h-6 text-blue-600" />
+            <h3 className="text-xl font-bold text-blue-800">Question Progress</h3>
           </div>
           <div className="space-y-3">
             {session && session.quiz?.questions && Array.from({ length: session.quiz.questions.length }).map((_, i) => (
@@ -361,8 +361,8 @@ export const HostPanelPage = () => {
                   i === session.currentQuestionIndex
                     ? 'bg-blue-600 text-white shadow-lg border border-blue-700'
                     : i < session.currentQuestionIndex
-                    ? 'bg-green-100 border border-green-400 text-green-800'
-                    : 'bg-white border border-blue-200 text-blue-700'
+                    ? 'bg-green-50 border border-green-300 text-green-800'
+                    : 'bg-white border border-blue-200 text-blue-600'
                 }`}
                 style={{ animationDelay: `${i * 0.1}s` }}
               >
@@ -383,7 +383,7 @@ export const HostPanelPage = () => {
         </div>
 
         {/* Main Stage */}
-        <div className="flex-1 rounded-2xl p-6 overflow-hidden flex flex-col" style={{ background: '#FFFFFF', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', border: '1px solid #e5e7eb' }}>
+        <div className="flex-1 rounded-2xl p-6 overflow-hidden flex flex-col" style={{ background: 'linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%)', boxShadow: '0 4px 12px rgba(139, 92, 246, 0.08)', border: '1px solid #e9d5ff' }}>
           {loading ? (
             <div className="flex items-center justify-center h-full">
               <div className="text-center rounded-3xl shadow-2xl p-16 max-w-md" style={{ background: 'linear-gradient(135deg, #F9FAFB 0%, #FFFFFF 100%)', border: '2px solid', borderImage: 'linear-gradient(135deg, #9333ea, #3b82f6, #ec4899) 1' }}>
@@ -400,17 +400,17 @@ export const HostPanelPage = () => {
           ) : session?.status === 'WAITING' ? (
             <div className="flex flex-col items-center justify-center h-full fade-in">
               {/* Participant Icon */}
-              <div className="w-28 h-28 rounded-full flex items-center justify-center mx-auto mb-6" style={{ background: '#f3f4f6', boxShadow: '0 4px 16px rgba(0,0,0,0.1)', border: '2px solid #d1d5db' }}>
-                <Users className="w-14 h-14 text-gray-600" />
+              <div className="w-28 h-28 rounded-full flex items-center justify-center mx-auto mb-6" style={{ background: '#f5f3ff', boxShadow: '0 4px 16px rgba(139, 92, 246, 0.1)', border: '2px solid #e9d5ff' }}>
+                <Users className="w-14 h-14 text-purple-600" />
               </div>
               
               {/* Main Text */}
-              <h1 className="text-gray-900 mb-3" style={{ fontSize: '28px', lineHeight: '1.2', fontWeight: '600', fontFamily: '"Inter", sans-serif' }}>
+              <h1 className="text-purple-900 mb-3" style={{ fontSize: '28px', lineHeight: '1.2', fontWeight: '600', fontFamily: '"Inter", sans-serif' }}>
                 Waiting for participants...
               </h1>
               
               {/* Subtext */}
-              <p className="mb-8" style={{ fontSize: '16px', color: '#6b7280', fontWeight: '500' }}>
+              <p className="mb-8" style={{ fontSize: '16px', color: '#7c3aed', fontWeight: '500' }}>
                 {session.participantCount} participant{session.participantCount !== 1 ? 's' : ''} joined
               </p>
               
@@ -424,16 +424,18 @@ export const HostPanelPage = () => {
                   borderRadius: '12px', 
                   fontSize: '16px', 
                   fontWeight: '600',
-                  background: '#6366f1',
-                  boxShadow: '0 2px 8px rgba(99, 102, 241, 0.3)',
+                  background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                  boxShadow: '0 4px 12px rgba(16, 185, 129, 0.3)',
                   transition: 'all 0.3s ease',
-                  border: '1px solid #4f46e5'
+                  border: '1px solid #059669'
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.background = '#4f46e5';
+                  e.currentTarget.style.background = 'linear-gradient(135deg, #059669 0%, #047857 100%)';
+                  e.currentTarget.style.boxShadow = '0 6px 16px rgba(16, 185, 129, 0.4)';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.background = '#6366f1';
+                  e.currentTarget.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(16, 185, 129, 0.3)';
                 }}
               >
                 <Play className="w-4 h-4" />
@@ -446,23 +448,23 @@ export const HostPanelPage = () => {
               {/* Question Header with Timer */}
               <div className="flex items-start justify-between mb-3">
                 <div className="flex-1">
-                  <h2 className="text-base font-bold text-gray-900 mb-2">
+                  <h2 className="text-base font-bold text-purple-900 mb-2">
                     Question {session.currentQuestionIndex + 1}
                   </h2>
-                  <p className="text-base font-medium leading-relaxed text-gray-800" style={{ fontFamily: '"Inter", sans-serif' }}>
+                  <p className="text-base font-medium leading-relaxed text-purple-800" style={{ fontFamily: '"Inter", sans-serif' }}>
                     {session.currentQuestion.text}
                   </p>
                 </div>
                 <div className={`text-3xl font-bold font-mono px-4 py-1.5 rounded-xl ml-4 flex-shrink-0 ${
-                  timer < 5 ? 'text-red-600 bg-red-50 animate-pulse border border-red-400' : 'text-gray-900 bg-gray-50 border border-gray-300'
+                  timer < 5 ? 'text-red-600 bg-red-50 animate-pulse border border-red-400' : 'text-purple-900 bg-purple-50 border border-purple-300'
                 }`} style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
                   {timer}<span className="text-lg ml-1">s</span>
                 </div>
               </div>
 
               {/* Live Answer Distribution */}
-              <div className="p-3 mb-3 flex-1" style={{ background: '#f9fafb', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.06)', border: '1px solid #e5e7eb' }}>
-                <h3 className="text-sm font-bold mb-2 flex items-center gap-2 text-gray-900">
+              <div className="p-3 mb-3 flex-1" style={{ background: '#faf5ff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(139, 92, 246, 0.06)', border: '1px solid #e9d5ff' }}>
+                <h3 className="text-sm font-bold mb-2 flex items-center gap-2 text-purple-900">
                   <div className="w-1.5 h-1.5 bg-green-500 rounded-full pulse-dot" style={{ boxShadow: '0 0 8px rgba(34,197,94,0.6)' }}></div>
                   Live Responses
                 </h3>
@@ -478,7 +480,7 @@ export const HostPanelPage = () => {
                             <div className="w-5 h-5 rounded-md flex items-center justify-center font-bold text-white text-xs" style={{ background: CHART_COLORS[index % 4] }}>
                               {String.fromCharCode(65 + index)}
                             </div>
-                            <span className="font-semibold text-gray-900 text-xs">{option.text}</span>
+                            <span className="font-semibold text-purple-900 text-xs">{option.text}</span>
                           </div>
                           <div className="flex items-center gap-1.5">
                             <span className="text-base font-bold" style={{ color: CHART_COLORS[index % 4] }}>{count}</span>
@@ -578,10 +580,10 @@ export const HostPanelPage = () => {
         </div>
 
         {/* Right Panel - Participants */}
-        <div className="w-80 rounded-2xl p-6 overflow-y-auto" style={{ background: 'linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%)', boxShadow: '0 4px 12px rgba(16, 185, 129, 0.15)', border: '1px solid #6ee7b7' }}>
+        <div className="w-80 rounded-2xl p-6 overflow-y-auto" style={{ background: 'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)', boxShadow: '0 4px 12px rgba(16, 185, 129, 0.08)', border: '1px solid #bbf7d0' }}>
           <div className="flex items-center gap-2 mb-6">
-            <Users className="w-6 h-6 text-green-700" />
-            <h3 className="text-xl font-bold text-green-900">Participants</h3>
+            <Users className="w-6 h-6 text-green-600" />
+            <h3 className="text-xl font-bold text-green-800">Participants</h3>
           </div>
           <div className="space-y-3">
             {session?.participants?.map((p, index) => (
@@ -589,16 +591,16 @@ export const HostPanelPage = () => {
                 key={p.id} 
                 className="rounded-2xl p-5 hover-lift fade-in" 
                 style={{ 
-                  background: 'rgba(255,255,255,0.7)',
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-                  border: '1px solid rgba(16, 185, 129, 0.3)',
+                  background: 'rgba(255,255,255,0.8)',
+                  boxShadow: '0 2px 8px rgba(16, 185, 129, 0.08)',
+                  border: '1px solid #bbf7d0',
                   animationDelay: `${index * 0.1}s`
                 }}
               >
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-green-500 rounded-full pulse-dot"></div>
-                    <div className="font-bold truncate text-green-900">{p.displayName}</div>
+                    <div className="font-bold truncate text-green-800">{p.displayName}</div>
                     {p.joinedLate && (
                       <span className="text-xs font-semibold bg-yellow-100 text-yellow-700 border border-yellow-300 px-1.5 py-0.5 rounded-full">
                         late
@@ -608,8 +610,8 @@ export const HostPanelPage = () => {
                   {p.avatarEmoji && <span className="text-3xl">{p.avatarEmoji}</span>}
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="text-2xl font-bold text-green-700">{p.score}</div>
-                  <div className="text-xs text-green-700 font-semibold">points</div>
+                  <div className="text-2xl font-bold text-green-600">{p.score}</div>
+                  <div className="text-xs text-green-600 font-semibold">points</div>
                 </div>
               </div>
             ))}
