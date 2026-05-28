@@ -624,21 +624,123 @@ export const HostPanelPage = () => {
       {/* QR Modal */}
       {qrModalOpen && (
         <div
-          className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+          className="fixed inset-0 flex items-center justify-center z-50 p-4"
+          style={{ background: 'rgba(0, 0, 0, 0.85)', backdropFilter: 'blur(8px)' }}
           onClick={() => setQrModalOpen(false)}
         >
-          <div className="rounded-3xl shadow-2xl p-10 max-w-md w-full" onClick={e => e.stopPropagation()} style={{ background: 'linear-gradient(135deg, #F9FAFB 0%, #FFFFFF 100%)', borderRadius: '28px', border: '2px solid', borderImage: 'linear-gradient(135deg, #9333ea, #3b82f6, #ec4899) 1' }}>
-            <h3 className="text-3xl font-extrabold mb-8 text-center text-gray-900">Scan to Join</h3>
-            <div className="bg-white p-8 rounded-2xl mb-8 shadow-inner">
-              <img src={qrUrl} alt="QR Code" className="w-full" />
+          <div 
+            className="max-w-lg w-full" 
+            onClick={e => e.stopPropagation()} 
+            style={{ 
+              background: 'linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)', 
+              borderRadius: '24px', 
+              boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)',
+              border: '1px solid #e2e8f0'
+            }}
+          >
+            {/* Header */}
+            <div style={{ 
+              background: 'linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%)', 
+              padding: '24px 32px',
+              borderTopLeftRadius: '24px',
+              borderTopRightRadius: '24px'
+            }}>
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-2xl font-bold text-white mb-1">Join Quiz Session</h3>
+                  <p className="text-sm text-white/80">Scan QR code to participate</p>
+                </div>
+                <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ background: 'rgba(255, 255, 255, 0.15)' }}>
+                  <QrCode className="w-6 h-6 text-white" />
+                </div>
+              </div>
             </div>
-            <button
-              onClick={() => setQrModalOpen(false)}
-              className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 rounded-xl transition-all w-full hover-lift"
-              style={{ boxShadow: '0 4px 16px rgba(59,130,246,0.3)' }}
-            >
-              Close
-            </button>
+
+            {/* Content */}
+            <div style={{ padding: '32px' }}>
+              {/* Room Code Display */}
+              <div className="text-center mb-6">
+                <p className="text-sm font-semibold text-gray-600 mb-2">Room Code</p>
+                <div className="inline-flex items-center gap-3 px-6 py-3" style={{ 
+                  background: 'linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)',
+                  borderRadius: '12px',
+                  border: '1px solid #bfdbfe'
+                }}>
+                  <span className="text-3xl font-bold tracking-wider text-blue-900">{roomCode}</span>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      copyRoomCode();
+                    }}
+                    className="hover-lift"
+                    style={{ 
+                      width: '36px', 
+                      height: '36px', 
+                      borderRadius: '8px', 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      justifyContent: 'center',
+                      background: copied ? '#10b981' : '#3b82f6',
+                      transition: 'all 0.3s ease'
+                    }}
+                  >
+                    {copied ? (
+                      <Check className="w-4 h-4 text-white" />
+                    ) : (
+                      <Copy className="w-4 h-4 text-white" />
+                    )}
+                  </button>
+                </div>
+              </div>
+
+              {/* QR Code */}
+              <div className="mb-6">
+                <div style={{ 
+                  background: '#ffffff',
+                  padding: '24px',
+                  borderRadius: '16px',
+                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
+                  border: '1px solid #e2e8f0'
+                }}>
+                  <img src={qrUrl} alt="QR Code" className="w-full" style={{ borderRadius: '8px' }} />
+                </div>
+              </div>
+
+              {/* Instructions */}
+              <div style={{ 
+                background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)',
+                padding: '16px',
+                borderRadius: '12px',
+                border: '1px solid #fcd34d',
+                marginBottom: '24px'
+              }}>
+                <p className="text-sm font-semibold text-amber-900 mb-2">📱 How to Join:</p>
+                <ol className="text-sm text-amber-800 space-y-1 ml-4">
+                  <li>1. Open your camera app</li>
+                  <li>2. Point at the QR code</li>
+                  <li>3. Tap the notification to join</li>
+                </ol>
+              </div>
+
+              {/* Close Button */}
+              <button
+                onClick={() => setQrModalOpen(false)}
+                className="w-full hover-lift"
+                style={{ 
+                  background: 'linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%)',
+                  color: 'white',
+                  fontWeight: '600',
+                  padding: '14px',
+                  borderRadius: '12px',
+                  boxShadow: '0 4px 12px rgba(30, 58, 138, 0.3)',
+                  transition: 'all 0.3s ease',
+                  border: 'none',
+                  cursor: 'pointer'
+                }}
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
       )}
