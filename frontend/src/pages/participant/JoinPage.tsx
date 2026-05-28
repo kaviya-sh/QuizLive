@@ -52,7 +52,12 @@ export const JoinPage = () => {
         navigate(`/play/waiting/${roomCode.toUpperCase()}`);
       }
     } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Failed to join session');
+      const errorMessage = error.response?.data?.message || 'Failed to join session';
+      if (errorMessage.includes('Session not found')) {
+        toast.error('No session found with this room code');
+      } else {
+        toast.error(errorMessage);
+      }
     } finally {
       setLoading(false);
     }
@@ -136,8 +141,8 @@ export const JoinPage = () => {
             {/* Join Button */}
             <button
               type="submit"
-              disabled={loading}
-              className="btn-primary w-full py-4 text-lg flex items-center justify-center gap-2 group"
+              disabled={loading || !roomCode.trim() || !displayName.trim()}
+              className="btn-primary w-full py-4 text-lg flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <>

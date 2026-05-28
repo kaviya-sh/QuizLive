@@ -23,7 +23,7 @@ export const WaitingRoomPage = () => {
           }
         }
       } catch (error) {
-        console.error('Failed to check session status:', error);
+        // Silently handle error - session might not exist yet
       }
     };
 
