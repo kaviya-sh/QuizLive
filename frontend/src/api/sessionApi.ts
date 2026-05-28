@@ -51,4 +51,9 @@ export const sessionApi = {
 
   getSessionHistory: () =>
     client.get<Session[]>('/sessions/history'),
+
+  getParticipantResults: (roomCode: string, participantId: string) =>
+    client.get<{ rank: number; score: number; totalScore: number; accuracy: number; correctAnswers: number; totalQuestions: number }>(
+      `/sessions/${roomCode}/results?participantId=${participantId}`
+    ),
 };

@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import { Trophy, Share2, Award, Target, TrendingUp, Crown, Home } from 'lucide-react';
+import { sessionApi } from '../../api/sessionApi';
 
 interface ResultData {
   rank: number;
@@ -39,14 +40,7 @@ export const ResultsPage = () => {
           return;
         }
 
-        const response = await fetch(`/api/sessions/${roomCode}/results?participantId=${participantId}`);
-        if (!response.ok) {
-          console.error('Failed to fetch results');
-          setLoading(false);
-          return;
-        }
-
-        const data = await response.json();
+        const { data } = await sessionApi.getParticipantResults(roomCode!, participantId);
         setResult({
           rank: data.rank || 0,
           score: data.score || 0,
@@ -136,7 +130,7 @@ export const ResultsPage = () => {
             No results found
           </p>
           <button
-            onClick={() => navigate('/join')}
+            onClick={() => navigate('/participant/dashboard')}
             style={{
               background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
               color: 'white',
@@ -148,7 +142,7 @@ export const ResultsPage = () => {
               boxShadow: '0 4px 12px rgba(59,130,246,0.3)'
             }}
           >
-            Join Another Quiz
+            Go to Dashboard
           </button>
         </div>
       </div>
