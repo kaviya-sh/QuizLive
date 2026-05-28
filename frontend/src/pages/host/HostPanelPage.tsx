@@ -272,24 +272,22 @@ export const HostPanelPage = () => {
               <ArrowLeft className="w-5 h-5 text-white" />
             </button>
             
-            {/* Room Code Card */}
-            <div className="flex items-center gap-3 px-6 py-3 hover-lift" style={{ background: 'rgba(255, 255, 255, 0.25)', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)', transition: '0.3s ease', border: '1px solid rgba(255, 255, 255, 0.3)', backdropFilter: 'blur(10px)' }}>
-              <span style={{ fontSize: '24px', fontWeight: '700', letterSpacing: '2px', color: '#FFFFFF' }}>{roomCode}</span>
+            {/* Room Code Card with Copy */}
+            <div className="flex items-center gap-2 px-4 py-2 hover-lift" style={{ background: 'rgba(255, 255, 255, 0.25)', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)', transition: '0.3s ease', border: '1px solid rgba(255, 255, 255, 0.3)', backdropFilter: 'blur(10px)' }}>
+              <span style={{ fontSize: '18px', fontWeight: '700', letterSpacing: '1.5px', color: '#FFFFFF' }}>{roomCode}</span>
+              <button
+                onClick={copyRoomCode}
+                className="hover-lift"
+                style={{ width: '32px', height: '32px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: copied ? 'rgba(16, 185, 129, 0.3)' : 'rgba(255, 255, 255, 0.2)', border: '1px solid rgba(255, 255, 255, 0.3)', transition: 'all 0.3s ease', cursor: 'pointer' }}
+                title={copied ? 'Copied!' : 'Copy Room Code'}
+              >
+                {copied ? (
+                  <Check className="w-3.5 h-3.5 text-white" />
+                ) : (
+                  <Copy className="w-3.5 h-3.5 text-white" />
+                )}
+              </button>
             </div>
-            
-            {/* Copy Button */}
-            <button
-              onClick={copyRoomCode}
-              className="hover-lift"
-              style={{ width: '48px', height: '48px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)', background: copied ? 'rgba(16, 185, 129, 0.2)' : 'rgba(255, 255, 255, 0.2)', border: '1px solid rgba(255, 255, 255, 0.3)', transition: 'all 0.3s ease', backdropFilter: 'blur(10px)' }}
-              title={copied ? 'Copied!' : 'Copy Room Code'}
-            >
-              {copied ? (
-                <Check className="w-4 h-4 text-white" />
-              ) : (
-                <Copy className="w-4 h-4 text-white" />
-              )}
-            </button>
             
             {/* QR Button */}
             <button
@@ -324,10 +322,10 @@ export const HostPanelPage = () => {
             </div>
             
             {/* Participants Count Card */}
-            <div className="flex items-center gap-2 hover-lift" style={{ padding: '12px 20px', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.2)', background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.2)' }}>
-              <Users className="w-5 h-5 text-white" />
-              <span style={{ fontSize: '20px', fontWeight: '700' }} className="text-white">{session?.participantCount || 0}</span>
-              <span style={{ fontWeight: '600', fontSize: '13px' }} className="text-white opacity-90">participants</span>
+            <div className="flex items-center gap-2 hover-lift" style={{ padding: '8px 16px', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.2)', background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.2)' }}>
+              <Users className="w-4 h-4 text-white" />
+              <span style={{ fontSize: '16px', fontWeight: '700' }} className="text-white">{session?.participantCount || 0}</span>
+              <span style={{ fontWeight: '600', fontSize: '12px' }} className="text-white opacity-90">participants</span>
             </div>
             
             {/* Connected Status */}
