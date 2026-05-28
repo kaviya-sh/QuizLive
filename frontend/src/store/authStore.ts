@@ -21,7 +21,7 @@ interface AuthState {
   checkSessionExpiry: () => boolean;
 }
 
-const APP_VERSION = import.meta.env.VITE_APP_VERSION || Date.now().toString();
+const APP_VERSION = '1.0.0'; // Update this version when deploying
 const SESSION_DURATION = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
 export const useAuthStore = create<AuthState>()(

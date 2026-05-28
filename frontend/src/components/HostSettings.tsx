@@ -17,20 +17,36 @@ export const HostSettings = ({ isOpen, onClose }: HostSettingsProps) => {
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [notifications, setNotifications] = useState(true);
   const [showAnswers, setShowAnswers] = useState(true);
+  const [saving, setSaving] = useState(false);
 
   const handleSaveProfile = async () => {
+    if (!displayName.trim()) {
+      toast.error('Display name is required');
+      return;
+    }
+    
+    setSaving(true);
     try {
-      await userApi.updateProfile({ displayName, email });
+      await userApi.updateProfile({ displayName: displayName.trim(), email: email.trim() });
       // Update local auth store
       if (user) {
         useAuthStore.setState({
-          user: { ...user, displayName, email }
+          user: { ...user, displayName: displayName.trim(), email: email.trim() }
         });
       }
-      toast.success('Profile updated successfully!');
-      onClose();
+      toast.success('Profile saved successfully!', {
+        duration: 3000,
+        style: {
+          background: '#10B981',
+          color: '#fff',
+        },
+      });
+      setTimeout(() => onClose(), 500);
     } catch (error: any) {
+      console.error('Profile update error:', error);
       toast.error(error.response?.data?.message || 'Failed to update profile');
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -95,9 +111,10 @@ export const HostSettings = ({ isOpen, onClose }: HostSettingsProps) => {
 
             <button
               onClick={handleSaveProfile}
-              className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition"
+              disabled={saving}
+              className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Save Profile
+              {saving ? 'Saving...' : 'Save Profile'}
             </button>
           </div>
 
