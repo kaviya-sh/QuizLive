@@ -40,6 +40,13 @@ function App() {
   const { isAuthenticated, user, _hydrated, checkSessionExpiry, clearAuth } = useAuthStore();
   const { notifications, removeNotification } = useNotificationStore();
 
+  // Wait for localStorage rehydration before rendering any routes.
+  // Without this, isAuthenticated() returns false on first render and
+  // ProtectedRoute redirects to /login even for logged-in users.
+  if (!_hydrated) return <Spinner />;
+
+  const authed = isAuthenticated();
+
   // Check session expiry
   useEffect(() => {
     const checkExpiry = () => {
@@ -53,26 +60,19 @@ function App() {
     };
 
     // Check expiry immediately only if authenticated
-    if (authed) {
+    if (isAuthenticated()) {
       checkExpiry();
     }
 
     // Check expiry every 5 minutes instead of every minute
     const interval = setInterval(() => {
-      if (authed) {
+      if (isAuthenticated()) {
         checkExpiry();
       }
     }, 300000); // 5 minutes
     
     return () => clearInterval(interval);
-  }, [checkSessionExpiry, clearAuth, authed]);
-
-  // Wait for localStorage rehydration before rendering any routes.
-  // Without this, isAuthenticated() returns false on first render and
-  // ProtectedRoute redirects to /login even for logged-in users.
-  if (!_hydrated) return <Spinner />;
-
-  const authed = isAuthenticated();
+  }, [checkSessionExpiry, clearAuth, isAuthenticated]);
 
   return (
     <BrowserRouter>
