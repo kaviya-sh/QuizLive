@@ -5,9 +5,10 @@ import { ForgotPasswordPage } from './pages/auth/ForgotPasswordPage';
 import { ResetPasswordPage } from './pages/auth/ResetPasswordPage';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { useAuthStore } from './store/authStore';
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { NotificationContainer } from './components/ui/NotificationContainer';
 import { useNotificationStore } from './store/notificationStore';
+import toast from 'react-hot-toast';
 
 const DashboardPage            = lazy(() => import('./pages/host/DashboardPage').then(m => ({ default: m.DashboardPage })));
 const QuizBuilderPage          = lazy(() => import('./pages/host/QuizBuilderPage').then(m => ({ default: m.QuizBuilderPage })));
@@ -36,8 +37,26 @@ const Spinner = () => (
 );
 
 function App() {
-  const { isAuthenticated, user, _hydrated } = useAuthStore();
+  const { isAuthenticated, user, _hydrated, checkSessionExpiry, clearAuth } = useAuthStore();
   const { notifications, removeNotification } = useNotificationStore();
+
+  // Check session expiry on mount and periodically
+  useEffect(() => {
+    const checkExpiry = () => {
+      if (checkSessionExpiry()) {
+        toast.error('Session expired. Please login again.');
+        clearAuth();
+        window.location.href = '/login';
+      }
+    };
+
+    // Check immediately
+    checkExpiry();
+
+    // Check every minute
+    const interval = setInterval(checkExpiry, 60000);
+    return () => clearInterval(interval);
+  }, [checkSessionExpiry, clearAuth]);
 
   // Wait for localStorage rehydration before rendering any routes.
   // Without this, isAuthenticated() returns false on first render and
