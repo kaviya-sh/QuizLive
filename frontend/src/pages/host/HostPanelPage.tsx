@@ -4,7 +4,7 @@ import { sessionApi } from '../../api/sessionApi';
 import { useHostSocket } from '../../hooks/useHostSocket';
 import { Session } from '../../types/api';
 import toast from 'react-hot-toast';
-import { Copy, QrCode, Users, Play, SkipForward, StopCircle, Wifi, WifiOff, CheckCircle2, BarChart3, Check } from 'lucide-react';
+import { Copy, QrCode, Users, Play, SkipForward, StopCircle, Wifi, WifiOff, CheckCircle2, BarChart3, Check, ArrowLeft } from 'lucide-react';
 
 export const HostPanelPage = () => {
   const { roomCode } = useParams<{ roomCode: string }>();
@@ -262,6 +262,16 @@ export const HostPanelPage = () => {
       <div className="px-8 py-5 sticky top-0 z-10" style={{ backdropFilter: 'blur(10px)', boxShadow: '0 4px 20px rgba(0,0,0,0.08)', borderBottom: '1px solid rgba(251,207,232,0.3)', background: 'linear-gradient(135deg, #FFFFFF 0%, #FFF5F7 40%, #FFE4E8 70%, #FBCFE8 100%)' }}>
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
+            {/* Back Button */}
+            <button
+              onClick={() => navigate('/dashboard')}
+              className="hover-lift flex items-center justify-center"
+              style={{ width: '48px', height: '48px', borderRadius: '50%', boxShadow: '0 4px 12px rgba(99,102,241,0.2)', background: 'linear-gradient(135deg, #EDE9FE 0%, #DDD6FE 100%)', border: '2px solid #C4B5FD', transition: 'all 0.3s ease' }}
+              title="Back to Dashboard"
+            >
+              <ArrowLeft className="w-5 h-5 text-violet-700" />
+            </button>
+            
             {/* Room Code Card - Teal/Cyan */}
             <div className="flex items-center gap-3 text-white px-6 py-3 hover-lift" style={{ background: 'linear-gradient(135deg, #14B8A6 0%, #06B6D4 100%)', borderRadius: '16px', boxShadow: '0 6px 20px rgba(20,184,166,0.3)', transition: '0.3s ease' }}>
               <span style={{ fontSize: '26px', fontWeight: '700', letterSpacing: '2px' }}>{roomCode}</span>
