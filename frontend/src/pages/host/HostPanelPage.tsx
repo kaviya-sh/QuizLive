@@ -266,14 +266,14 @@ export const HostPanelPage = () => {
             <button
               onClick={() => navigate('/dashboard')}
               className="hover-lift flex items-center justify-center"
-              style={{ width: '48px', height: '48px', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.2)', background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.2)', transition: 'all 0.3s ease' }}
+              style={{ width: '48px', height: '48px', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.2)', background: '#8b5cf6', border: '1px solid #7c3aed', transition: 'all 0.3s ease' }}
               title="Back to Dashboard"
             >
               <ArrowLeft className="w-5 h-5 text-white" />
             </button>
             
             {/* Room Code Card */}
-            <div className="flex items-center gap-3 px-6 py-3 hover-lift" style={{ background: 'rgba(255,255,255,0.2)', borderRadius: '12px', boxShadow: '0 4px 12px rgba(0,0,0,0.15)', transition: '0.3s ease', border: '1px solid rgba(255,255,255,0.3)' }}>
+            <div className="flex items-center gap-3 px-6 py-3 hover-lift" style={{ background: '#06b6d4', borderRadius: '12px', boxShadow: '0 4px 12px rgba(6, 182, 212, 0.3)', transition: '0.3s ease', border: '1px solid #0891b2' }}>
               <span style={{ fontSize: '24px', fontWeight: '700', letterSpacing: '2px', color: '#FFFFFF' }}>{roomCode}</span>
             </div>
             
@@ -281,7 +281,7 @@ export const HostPanelPage = () => {
             <button
               onClick={copyRoomCode}
               className="hover-lift"
-              style={{ width: '48px', height: '48px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.2)', background: copied ? 'rgba(16, 185, 129, 0.9)' : 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.2)', transition: 'all 0.3s ease' }}
+              style={{ width: '48px', height: '48px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.2)', background: copied ? '#10b981' : '#f59e0b', border: copied ? '1px solid #059669' : '1px solid #d97706', transition: 'all 0.3s ease' }}
               title={copied ? 'Copied!' : 'Copy Room Code'}
             >
               {copied ? (
@@ -295,7 +295,7 @@ export const HostPanelPage = () => {
             <button
               onClick={showQR}
               className="hover-lift flex items-center gap-2"
-              style={{ padding: '10px 16px', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.2)', background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.2)' }}
+              style={{ padding: '10px 16px', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.2)', background: '#ec4899', border: '1px solid #db2777' }}
               title="Show QR Code"
             >
               <QrCode className="w-4 h-4 text-white" />
@@ -383,7 +383,7 @@ export const HostPanelPage = () => {
         </div>
 
         {/* Main Stage */}
-        <div className="flex-1 rounded-2xl p-6 overflow-hidden flex flex-col" style={{ background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)', boxShadow: '0 4px 12px rgba(245, 158, 11, 0.15)', border: '1px solid #fcd34d' }}>
+        <div className="flex-1 rounded-2xl p-6 overflow-hidden flex flex-col" style={{ background: '#FFFFFF', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', border: '1px solid #e5e7eb' }}>
           {loading ? (
             <div className="flex items-center justify-center h-full">
               <div className="text-center rounded-3xl shadow-2xl p-16 max-w-md" style={{ background: 'linear-gradient(135deg, #F9FAFB 0%, #FFFFFF 100%)', border: '2px solid', borderImage: 'linear-gradient(135deg, #9333ea, #3b82f6, #ec4899) 1' }}>
@@ -400,17 +400,17 @@ export const HostPanelPage = () => {
           ) : session?.status === 'WAITING' ? (
             <div className="flex flex-col items-center justify-center h-full fade-in">
               {/* Participant Icon */}
-              <div className="w-28 h-28 rounded-full flex items-center justify-center mx-auto mb-6" style={{ background: 'rgba(255,255,255,0.5)', boxShadow: '0 4px 16px rgba(0,0,0,0.1)', border: '2px solid rgba(245, 158, 11, 0.3)' }}>
-                <Users className="w-14 h-14 text-amber-700" />
+              <div className="w-28 h-28 rounded-full flex items-center justify-center mx-auto mb-6" style={{ background: '#f3f4f6', boxShadow: '0 4px 16px rgba(0,0,0,0.1)', border: '2px solid #d1d5db' }}>
+                <Users className="w-14 h-14 text-gray-600" />
               </div>
               
               {/* Main Text */}
-              <h1 className="text-amber-900 mb-3" style={{ fontSize: '28px', lineHeight: '1.2', fontWeight: '600', fontFamily: '"Inter", sans-serif' }}>
+              <h1 className="text-gray-900 mb-3" style={{ fontSize: '28px', lineHeight: '1.2', fontWeight: '600', fontFamily: '"Inter", sans-serif' }}>
                 Waiting for participants...
               </h1>
               
               {/* Subtext */}
-              <p className="mb-8" style={{ fontSize: '16px', color: '#92400e', fontWeight: '500' }}>
+              <p className="mb-8" style={{ fontSize: '16px', color: '#6b7280', fontWeight: '500' }}>
                 {session.participantCount} participant{session.participantCount !== 1 ? 's' : ''} joined
               </p>
               
@@ -424,15 +424,16 @@ export const HostPanelPage = () => {
                   borderRadius: '12px', 
                   fontSize: '16px', 
                   fontWeight: '600',
-                  background: '#10B981',
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-                  transition: 'all 0.3s ease'
+                  background: '#6366f1',
+                  boxShadow: '0 2px 8px rgba(99, 102, 241, 0.3)',
+                  transition: 'all 0.3s ease',
+                  border: '1px solid #4f46e5'
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.background = '#059669';
+                  e.currentTarget.style.background = '#4f46e5';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.background = '#10B981';
+                  e.currentTarget.style.background = '#6366f1';
                 }}
               >
                 <Play className="w-4 h-4" />
@@ -445,23 +446,23 @@ export const HostPanelPage = () => {
               {/* Question Header with Timer */}
               <div className="flex items-start justify-between mb-3">
                 <div className="flex-1">
-                  <h2 className="text-base font-bold text-amber-900 mb-2">
+                  <h2 className="text-base font-bold text-gray-900 mb-2">
                     Question {session.currentQuestionIndex + 1}
                   </h2>
-                  <p className="text-base font-medium leading-relaxed text-amber-900" style={{ fontFamily: '"Inter", sans-serif' }}>
+                  <p className="text-base font-medium leading-relaxed text-gray-800" style={{ fontFamily: '"Inter", sans-serif' }}>
                     {session.currentQuestion.text}
                   </p>
                 </div>
                 <div className={`text-3xl font-bold font-mono px-4 py-1.5 rounded-xl ml-4 flex-shrink-0 ${
-                  timer < 5 ? 'text-red-600 bg-red-50 animate-pulse border border-red-400' : 'text-amber-900 bg-white border border-amber-300'
+                  timer < 5 ? 'text-red-600 bg-red-50 animate-pulse border border-red-400' : 'text-gray-900 bg-gray-50 border border-gray-300'
                 }`} style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
                   {timer}<span className="text-lg ml-1">s</span>
                 </div>
               </div>
 
               {/* Live Answer Distribution */}
-              <div className="p-3 mb-3 flex-1" style={{ background: 'rgba(255,255,255,0.6)', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.08)', border: '1px solid rgba(245, 158, 11, 0.3)' }}>
-                <h3 className="text-sm font-bold mb-2 flex items-center gap-2 text-amber-900">
+              <div className="p-3 mb-3 flex-1" style={{ background: '#f9fafb', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.06)', border: '1px solid #e5e7eb' }}>
+                <h3 className="text-sm font-bold mb-2 flex items-center gap-2 text-gray-900">
                   <div className="w-1.5 h-1.5 bg-green-500 rounded-full pulse-dot" style={{ boxShadow: '0 0 8px rgba(34,197,94,0.6)' }}></div>
                   Live Responses
                 </h3>
@@ -477,7 +478,7 @@ export const HostPanelPage = () => {
                             <div className="w-5 h-5 rounded-md flex items-center justify-center font-bold text-white text-xs" style={{ background: CHART_COLORS[index % 4] }}>
                               {String.fromCharCode(65 + index)}
                             </div>
-                            <span className="font-semibold text-amber-900 text-xs">{option.text}</span>
+                            <span className="font-semibold text-gray-900 text-xs">{option.text}</span>
                           </div>
                           <div className="flex items-center gap-1.5">
                             <span className="text-base font-bold" style={{ color: CHART_COLORS[index % 4] }}>{count}</span>
