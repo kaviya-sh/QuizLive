@@ -21,8 +21,8 @@ interface AuthState {
   checkSessionExpiry: () => boolean;
 }
 
-const APP_VERSION = '1.0.0'; // Update this version when deploying
-const SESSION_DURATION = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+const APP_VERSION = '1.0.0';
+const SESSION_DURATION = 7 * 24 * 60 * 60 * 1000; // 7 days
 
 export const useAuthStore = create<AuthState>()(
   persist(
@@ -60,13 +60,6 @@ export const useAuthStore = create<AuthState>()(
       onRehydrateStorage: () => (state) => {
         if (state) {
           state._hydrated = true;
-          // Check if app version changed, clear auth if so
-          if (state.appVersion !== APP_VERSION) {
-            state.user = null;
-            state.accessToken = null;
-            state.appVersion = APP_VERSION;
-            state.loginTime = null;
-          }
           // Check if session expired
           if (state.loginTime && Date.now() - state.loginTime > SESSION_DURATION) {
             state.user = null;

@@ -44,8 +44,10 @@ export const HostPanelPage = () => {
         setQuestionStartTimeSynced(Date.now());
       }
     } catch (err: any) {
-      toast.error(err.response?.data?.message || 'Failed to load session');
-      navigate('/dashboard');
+      if (isInitialLoad.current) {
+        toast.error(err.response?.data?.message || 'Failed to load session');
+        navigate('/dashboard');
+      }
     } finally {
       if (isInitialLoad.current) {
         setLoading(false);
@@ -66,8 +68,8 @@ export const HostPanelPage = () => {
     if (msg.type === 'JOINED') {
       console.log('Participant joined, reloading session');
       const name = msg.participant?.displayName || 'A participant';
-      toast.success(`🎉 ${name} joined the quiz!`, {
-        duration: 3000,
+      toast.success(`🎉 ${name} joined!`, {
+        duration: 2000,
         style: { background: '#10b981', color: '#ffffff' },
       });
       loadSession();
@@ -75,10 +77,10 @@ export const HostPanelPage = () => {
 
     if (msg.type === 'LATE_JOINER') {
       const name = msg.participant?.displayName || 'Someone';
-      toast(`👀 ${name} joined mid-session as a spectator`, {
+      toast(`👀 ${name} joined late`, {
         icon: '🕐',
         style: { background: '#fef3c7', color: '#92400e', border: '1px solid #f59e0b' },
-        duration: 4000,
+        duration: 2000,
       });
       loadSession();
     }

@@ -40,33 +40,8 @@ function App() {
   const { isAuthenticated, user, _hydrated, checkSessionExpiry, clearAuth } = useAuthStore();
   const { notifications, removeNotification } = useNotificationStore();
 
-  // Check deployment version and session expiry
+  // Check session expiry
   useEffect(() => {
-    const checkVersion = async () => {
-      try {
-        const response = await fetch('/version.json?t=' + Date.now());
-        const data = await response.json();
-        const storedVersion = localStorage.getItem('appVersion');
-        
-        if (storedVersion && storedVersion !== data.version) {
-          // New deployment detected
-          toast.error('New version deployed. Please login again.', { duration: 5000 });
-          clearAuth();
-          localStorage.setItem('appVersion', data.version);
-          setTimeout(() => {
-            window.location.href = '/login';
-          }, 1000);
-          return;
-        }
-        
-        if (!storedVersion) {
-          localStorage.setItem('appVersion', data.version);
-        }
-      } catch (error) {
-        console.error('Failed to check version:', error);
-      }
-    };
-
     const checkExpiry = () => {
       if (checkSessionExpiry()) {
         toast.error('Session expired. Please login again.', { duration: 5000 });
@@ -77,16 +52,20 @@ function App() {
       }
     };
 
-    // Check version on mount
-    checkVersion();
-    
-    // Check expiry immediately
-    checkExpiry();
+    // Check expiry immediately only if authenticated
+    if (authed) {
+      checkExpiry();
+    }
 
-    // Check expiry every minute
-    const interval = setInterval(checkExpiry, 60000);
+    // Check expiry every 5 minutes instead of every minute
+    const interval = setInterval(() => {
+      if (authed) {
+        checkExpiry();
+      }
+    }, 300000); // 5 minutes
+    
     return () => clearInterval(interval);
-  }, [checkSessionExpiry, clearAuth]);
+  }, [checkSessionExpiry, clearAuth, authed]);
 
   // Wait for localStorage rehydration before rendering any routes.
   // Without this, isAuthenticated() returns false on first render and
