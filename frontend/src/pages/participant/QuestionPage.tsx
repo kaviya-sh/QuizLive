@@ -64,25 +64,22 @@ export const QuestionPage = () => {
   useEffect(() => {
     const fetchCurrentQuestion = async () => {
       try {
-        console.log('Fetching current question for room:', roomCode);
         const response = await fetch(`/api/sessions/${roomCode}`);
         
         if (!response.ok) {
-          console.error('Failed to fetch session:', response.status);
+          // Session not found, redirect to join page
+          navigate('/participant/join', { replace: true });
           return;
         }
         
         const data = await response.json();
-        console.log('Session data:', data);
         
         if (data.status === 'FINISHED') {
-          console.log('Session already finished, navigating to results');
           navigate(`/results/${roomCode}`);
           return;
         }
         
         if (data.status === 'ACTIVE' && data.currentQuestion) {
-          console.log('Setting current question:', data.currentQuestion);
           setIsWaiting(false);
           setQuestion({
             id: data.currentQuestion.id,
@@ -92,18 +89,16 @@ export const QuestionPage = () => {
           });
           setTimer(data.currentQuestion.timeLimitSeconds);
         } else if (data.status === 'WAITING') {
-          console.log('Session is waiting for host to start');
           setIsWaiting(true);
-        } else {
-          console.log('Session not active or no current question. Status:', data.status);
         }
       } catch (error) {
-        console.error('Failed to fetch current question:', error);
+        // Error fetching session, redirect to join page
+        navigate('/participant/join', { replace: true });
       }
     };
 
     fetchCurrentQuestion();
-  }, [roomCode]);
+  }, [roomCode, navigate]);
 
   useEffect(() => {
     if (question && !isWaiting) {

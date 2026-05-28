@@ -22,7 +22,6 @@ const ParticipantDashboardPage = lazy(() => import('./pages/participant/Particip
 const JoinQuizPage             = lazy(() => import('./pages/participant/JoinQuizPage').then(m => ({ default: m.JoinQuizPage })));
 const MyResultsPage            = lazy(() => import('./pages/participant/MyResultsPage').then(m => ({ default: m.MyResultsPage })));
 const ParticipantAnalyticsPage = lazy(() => import('./pages/participant/ParticipantAnalyticsPage').then(m => ({ default: m.ParticipantAnalyticsPage })));
-const JoinPage                 = lazy(() => import('./pages/participant/JoinPage').then(m => ({ default: m.JoinPage })));
 const WaitingRoomPage          = lazy(() => import('./pages/participant/WaitingRoomPage').then(m => ({ default: m.WaitingRoomPage })));
 const QuestionPage             = lazy(() => import('./pages/participant/QuestionPage').then(m => ({ default: m.QuestionPage })));
 const LeaderboardPage          = lazy(() => import('./pages/participant/LeaderboardPage').then(m => ({ default: m.LeaderboardPage })));
@@ -111,8 +110,8 @@ function App() {
           </Route>
 
           {/* Participant game pages (full-screen, no sidebar) */}
-          <Route path="/join" element={<JoinPage />} />
-          <Route path="/join/:roomCode" element={<JoinPage />} />
+          <Route path="/join" element={<JoinQuizPage />} />
+          <Route path="/join/:roomCode" element={<JoinQuizPage />} />
           <Route path="/play/waiting/:roomCode" element={<WaitingRoomPage />} />
           <Route path="/play/question/:roomCode" element={<QuestionPage />} />
           <Route path="/play/leaderboard/:roomCode" element={<LeaderboardPage />} />
