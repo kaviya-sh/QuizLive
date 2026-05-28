@@ -15,40 +15,6 @@ export const JoinQuizPage = () => {
   const [displayName, setDisplayName] = useState(user?.displayName ?? '');
   const [selectedEmoji, setSelectedEmoji] = useState(AVATAR_EMOJIS[0]);
   const [joining, setJoining] = useState(false);
-  const [validatingRoom, setValidatingRoom] = useState(false);
-  const [isRoomValid, setIsRoomValid] = useState<boolean | null>(null);
-
-  // Validate room code when it changes
-  useEffect(() => {
-    const validateRoomCode = async () => {
-      if (roomCode.length === 6) {
-        setValidatingRoom(true);
-        try {
-          const response = await fetch(`/api/sessions/${roomCode.toUpperCase()}`);
-          if (response.ok) {
-            const data = await response.json();
-            // Check if session exists and is not finished
-            if (data && data.status !== 'FINISHED') {
-              setIsRoomValid(true);
-            } else {
-              setIsRoomValid(false);
-            }
-          } else {
-            setIsRoomValid(false);
-          }
-        } catch (error) {
-          setIsRoomValid(false);
-        } finally {
-          setValidatingRoom(false);
-        }
-      } else {
-        setIsRoomValid(null);
-      }
-    };
-
-    const debounceTimer = setTimeout(validateRoomCode, 500);
-    return () => clearTimeout(debounceTimer);
-  }, [roomCode]);
 
   const handleJoin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -76,7 +42,12 @@ export const JoinQuizPage = () => {
         navigate(`/play/waiting/${roomCode.toUpperCase()}`);
       }
     } catch (err: any) {
-      toast.error(err.response?.data?.message || 'Failed to join session');
+      const errorMessage = err.response?.data?.message || 'Failed to join session';
+      if (errorMessage.includes('Session not found')) {
+        toast.error('No session found with this room code');
+      } else {
+        toast.error(errorMessage);
+      }
     } finally {
       setJoining(false);
     }
@@ -116,41 +87,9 @@ export const JoinQuizPage = () => {
                   placeholder="ABC123"
                   maxLength={6}
                   className="w-full px-6 py-4 text-center text-3xl font-bold border-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent uppercase tracking-widest transition-all"
-                  style={{ 
-                    borderColor: isRoomValid === false ? '#EF4444' : isRoomValid === true ? '#10B981' : '#E5E7EB', 
-                    background: 'white' 
-                  }}
+                  style={{ borderColor: '#E5E7EB', background: 'white' }}
                 />
-                {validatingRoom && (
-                  <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
-                    <div className="w-6 h-6 border-2 border-teal-500 border-t-transparent rounded-full animate-spin"></div>
-                  </div>
-                )}
-                {!validatingRoom && isRoomValid === true && (
-                  <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
-                    <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                      <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
-                    </div>
-                  </div>
-                )}
-                {!validatingRoom && isRoomValid === false && (
-                  <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
-                    <div className="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center">
-                      <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </div>
-                  </div>
-                )}
               </div>
-              {isRoomValid === false && (
-                <p className="mt-2 text-sm text-red-600 font-semibold">Invalid room code. Please check and try again.</p>
-              )}
-              {isRoomValid === true && (
-                <p className="mt-2 text-sm text-green-600 font-semibold">✓ Valid room code</p>
-              )}
             </div>
 
             <div>
@@ -187,15 +126,9 @@ export const JoinQuizPage = () => {
 
             <button
               type="submit"
-              disabled={joining || !isRoomValid || !displayName.trim()}
-              className="w-full text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-all shadow-md hover-lift"
-              style={{ 
-                background: (joining || !isRoomValid || !displayName.trim()) 
-                  ? 'linear-gradient(135deg, #9CA3AF 0%, #6B7280 100%)' 
-                  : 'linear-gradient(135deg, #14B8A6 0%, #06B6D4 100%)',
-                cursor: (joining || !isRoomValid || !displayName.trim()) ? 'not-allowed' : 'pointer',
-                opacity: (joining || !isRoomValid || !displayName.trim()) ? 0.6 : 1
-              }}
+              disabled={joining || !roomCode.trim() || !displayName.trim()}
+              className="w-full text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-all shadow-md hover-lift disabled:opacity-50 disabled:cursor-not-allowed"
+              style={{ background: 'linear-gradient(135deg, #14B8A6 0%, #06B6D4 100%)' }}}
             >
               {joining ? (
                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
