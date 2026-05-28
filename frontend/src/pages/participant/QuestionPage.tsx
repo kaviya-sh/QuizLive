@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import { ConnectionStatus } from '../../components/ConnectionStatus';
 import { CheckCircle2, XCircle, Loader2, Users } from 'lucide-react';
+import { sessionApi } from '../../api/sessionApi';
 
 interface Question {
   id: string;
@@ -64,15 +65,7 @@ export const QuestionPage = () => {
   useEffect(() => {
     const fetchCurrentQuestion = async () => {
       try {
-        const response = await fetch(`/api/sessions/${roomCode}`);
-        
-        if (!response.ok) {
-          // Session not found, redirect to join page
-          navigate('/participant/join', { replace: true });
-          return;
-        }
-        
-        const data = await response.json();
+        const { data } = await sessionApi.getSession(roomCode!);
         
         if (data.status === 'FINISHED') {
           navigate(`/results/${roomCode}`);

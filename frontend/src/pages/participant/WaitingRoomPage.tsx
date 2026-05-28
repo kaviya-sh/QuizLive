@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useParticipantSocket } from '../../hooks/useParticipantSocket';
 import { Users, Loader2 } from 'lucide-react';
 import { ConnectionStatus } from '../../components/ConnectionStatus';
+import { sessionApi } from '../../api/sessionApi';
 
 export const WaitingRoomPage = () => {
   const { roomCode } = useParams<{ roomCode: string }>();
@@ -13,14 +14,11 @@ export const WaitingRoomPage = () => {
   useEffect(() => {
     const checkSessionStatus = async () => {
       try {
-        const response = await fetch(`/api/sessions/${roomCode}`);
-        if (response.ok) {
-          const data = await response.json();
-          if (data.status === 'ACTIVE') {
-            navigate(`/play/question/${roomCode}`, { replace: true });
-          } else {
-            setParticipantCount(data.participantCount || 0);
-          }
+        const { data } = await sessionApi.getSession(roomCode!);
+        if (data.status === 'ACTIVE') {
+          navigate(`/play/question/${roomCode}`, { replace: true });
+        } else {
+          setParticipantCount(data.participantCount || 0);
         }
       } catch (error) {
         // Silently handle error - session might not exist yet
