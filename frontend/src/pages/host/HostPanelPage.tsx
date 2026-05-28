@@ -266,14 +266,14 @@ export const HostPanelPage = () => {
             <button
               onClick={() => navigate('/dashboard')}
               className="hover-lift flex items-center justify-center"
-              style={{ width: '48px', height: '48px', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.15)', background: 'linear-gradient(135deg, #f0abfc 0%, #e879f9 100%)', border: '1px solid #e879f9', transition: 'all 0.3s ease' }}
+              style={{ width: '48px', height: '48px', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.15)', background: 'linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%)', border: '1px solid #8b5cf6', transition: 'all 0.3s ease' }}
               title="Back to Dashboard"
             >
               <ArrowLeft className="w-5 h-5 text-white" />
             </button>
             
             {/* Room Code Card */}
-            <div className="flex items-center gap-3 px-6 py-3 hover-lift" style={{ background: 'linear-gradient(135deg, #67e8f9 0%, #22d3ee 100%)', borderRadius: '12px', boxShadow: '0 4px 12px rgba(34, 211, 238, 0.25)', transition: '0.3s ease', border: '1px solid #22d3ee' }}>
+            <div className="flex items-center gap-3 px-6 py-3 hover-lift" style={{ background: 'linear-gradient(135deg, #34d399 0%, #10b981 100%)', borderRadius: '12px', boxShadow: '0 4px 12px rgba(16, 185, 129, 0.25)', transition: '0.3s ease', border: '1px solid #10b981' }}>
               <span style={{ fontSize: '24px', fontWeight: '700', letterSpacing: '2px', color: '#FFFFFF' }}>{roomCode}</span>
             </div>
             
@@ -281,7 +281,7 @@ export const HostPanelPage = () => {
             <button
               onClick={copyRoomCode}
               className="hover-lift"
-              style={{ width: '48px', height: '48px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.15)', background: copied ? 'linear-gradient(135deg, #86efac 0%, #4ade80 100%)' : 'linear-gradient(135deg, #fde047 0%, #facc15 100%)', border: copied ? '1px solid #4ade80' : '1px solid #facc15', transition: 'all 0.3s ease' }}
+              style={{ width: '48px', height: '48px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.15)', background: copied ? 'linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%)' : 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)', border: copied ? '1px solid #3b82f6' : '1px solid #f59e0b', transition: 'all 0.3s ease' }}
               title={copied ? 'Copied!' : 'Copy Room Code'}
             >
               {copied ? (
@@ -295,7 +295,7 @@ export const HostPanelPage = () => {
             <button
               onClick={showQR}
               className="hover-lift flex items-center gap-2"
-              style={{ padding: '10px 16px', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.15)', background: 'linear-gradient(135deg, #fb923c 0%, #f97316 100%)', border: '1px solid #f97316' }}
+              style={{ padding: '10px 16px', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.15)', background: 'linear-gradient(135deg, #f472b6 0%, #ec4899 100%)', border: '1px solid #ec4899' }}
               title="Show QR Code"
             >
               <QrCode className="w-4 h-4 text-white" />
@@ -354,13 +354,17 @@ export const HostPanelPage = () => {
             <h3 className="text-xl font-bold text-blue-800">Question Progress</h3>
           </div>
           <div className="space-y-3">
-            {session && session.quiz?.questions && Array.from({ length: session.quiz.questions.length }).map((_, i) => (
+            {session && session.quiz?.questions && Array.from({ length: session.quiz.questions.length }).map((_, i) => {
+              const isCompleted = session.status === 'FINISHED' || i < session.currentQuestionIndex;
+              const isCurrent = i === session.currentQuestionIndex && session.status !== 'FINISHED';
+              
+              return (
               <div
                 key={i}
                 className={`p-4 rounded-xl transition-all hover-lift fade-in ${
-                  i === session.currentQuestionIndex
+                  isCurrent
                     ? 'bg-blue-600 text-white shadow-lg border border-blue-700'
-                    : i < session.currentQuestionIndex
+                    : isCompleted
                     ? 'bg-green-50 border border-green-300 text-green-800'
                     : 'bg-white border border-blue-200 text-blue-600'
                 }`}
@@ -368,17 +372,17 @@ export const HostPanelPage = () => {
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    {i === session.currentQuestionIndex && (
+                    {isCurrent && (
                       <div className="w-2 h-2 bg-white rounded-full pulse-dot"></div>
                     )}
                     <span className="font-semibold text-sm">Question {i + 1}</span>
                   </div>
-                  {i < session.currentQuestionIndex && (
+                  {isCompleted && (
                     <CheckCircle2 className="w-5 h-5 text-green-600" />
                   )}
                 </div>
               </div>
-            ))}
+            )})}
           </div>
         </div>
 
@@ -537,10 +541,10 @@ export const HostPanelPage = () => {
                 <div className="w-32 h-32 rounded-full flex items-center justify-center mx-auto mb-8 float-animation" style={{ background: 'linear-gradient(135deg, #d1fae5, #a7f3d0)', boxShadow: '0 8px 24px rgba(34,197,94,0.2)' }}>
                   <CheckCircle2 className="w-16 h-16 text-green-600" />
                 </div>
-                <h1 className="text-pink-900 mb-4" style={{ fontSize: '48px', lineHeight: '1.1', fontWeight: '800', letterSpacing: '-1px' }}>
+                <h1 className="text-purple-900 mb-4" style={{ fontSize: '48px', lineHeight: '1.1', fontWeight: '800', letterSpacing: '-1px' }}>
                   Quiz Completed!
                 </h1>
-                <p className="mb-10 text-pink-700" style={{ fontSize: '20px', fontWeight: '600' }}>
+                <p className="mb-10 text-purple-700" style={{ fontSize: '20px', fontWeight: '600' }}>
                   Session has ended successfully
                 </p>
                 <div className="flex gap-3 justify-center">
