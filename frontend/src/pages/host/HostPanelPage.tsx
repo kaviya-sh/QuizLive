@@ -266,14 +266,14 @@ export const HostPanelPage = () => {
             <button
               onClick={() => navigate('/dashboard')}
               className="hover-lift flex items-center justify-center"
-              style={{ width: '48px', height: '48px', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.15)', background: 'linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%)', border: '1px solid #8b5cf6', transition: 'all 0.3s ease' }}
+              style={{ width: '48px', height: '48px', borderRadius: '12px', boxShadow: '0 2px 8px rgba(124, 77, 255, 0.3)', background: '#7C4DFF', border: '1px solid #6A3DE8', transition: 'all 0.3s ease' }}
               title="Back to Dashboard"
             >
               <ArrowLeft className="w-5 h-5 text-white" />
             </button>
             
             {/* Room Code Card */}
-            <div className="flex items-center gap-3 px-6 py-3 hover-lift" style={{ background: 'linear-gradient(135deg, #34d399 0%, #10b981 100%)', borderRadius: '12px', boxShadow: '0 4px 12px rgba(16, 185, 129, 0.25)', transition: '0.3s ease', border: '1px solid #10b981' }}>
+            <div className="flex items-center gap-3 px-6 py-3 hover-lift" style={{ background: '#10B981', borderRadius: '12px', boxShadow: '0 4px 12px rgba(16, 185, 129, 0.3)', transition: '0.3s ease', border: '1px solid #059669' }}>
               <span style={{ fontSize: '24px', fontWeight: '700', letterSpacing: '2px', color: '#FFFFFF' }}>{roomCode}</span>
             </div>
             
@@ -281,7 +281,7 @@ export const HostPanelPage = () => {
             <button
               onClick={copyRoomCode}
               className="hover-lift"
-              style={{ width: '48px', height: '48px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.15)', background: copied ? 'linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%)' : 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)', border: copied ? '1px solid #3b82f6' : '1px solid #f59e0b', transition: 'all 0.3s ease' }}
+              style={{ width: '48px', height: '48px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(245, 158, 11, 0.3)', background: copied ? '#10B981' : '#F59E0B', border: copied ? '1px solid #059669' : '1px solid #D97706', transition: 'all 0.3s ease' }}
               title={copied ? 'Copied!' : 'Copy Room Code'}
             >
               {copied ? (
@@ -295,7 +295,7 @@ export const HostPanelPage = () => {
             <button
               onClick={showQR}
               className="hover-lift flex items-center gap-2"
-              style={{ padding: '10px 16px', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.15)', background: 'linear-gradient(135deg, #f472b6 0%, #ec4899 100%)', border: '1px solid #ec4899' }}
+              style={{ padding: '10px 16px', borderRadius: '12px', boxShadow: '0 2px 8px rgba(236, 72, 153, 0.3)', background: 'linear-gradient(135deg, #EC4899 0%, #D946EF 100%)', border: '1px solid #D946EF' }}
               title="Show QR Code"
             >
               <QrCode className="w-4 h-4 text-white" />
