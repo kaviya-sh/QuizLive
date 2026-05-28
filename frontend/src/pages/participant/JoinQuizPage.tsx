@@ -128,7 +128,7 @@ export const JoinQuizPage = () => {
               type="submit"
               disabled={joining || !roomCode.trim() || !displayName.trim()}
               className="w-full text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-all shadow-md hover-lift disabled:opacity-50 disabled:cursor-not-allowed"
-              style={{ background: 'linear-gradient(135deg, #14B8A6 0%, #06B6D4 100%)' }}}
+              style={{ background: 'linear-gradient(135deg, #14B8A6 0%, #06B6D4 100%)' }}
             >
               {joining ? (
                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
