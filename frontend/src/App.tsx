@@ -3,6 +3,7 @@ import { LoginPage } from './pages/auth/LoginPage';
 import { RegisterPage } from './pages/auth/RegisterPage';
 import { ForgotPasswordPage } from './pages/auth/ForgotPasswordPage';
 import { ResetPasswordPage } from './pages/auth/ResetPasswordPage';
+import { LandingPage } from './pages/LandingPage';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { useAuthStore } from './store/authStore';
 import { lazy, Suspense, useEffect } from 'react';
@@ -79,18 +80,21 @@ function App() {
       <NotificationContainer notifications={notifications} onRemove={removeNotification} />
       <Suspense fallback={<Spinner />}>
         <Routes>
+          {/* Landing page */}
+          <Route path="/" element={<LandingPage />} />
+          
           {/* Auth pages */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           <Route path="/reset-password" element={<ResetPasswordPage />} />
 
-          {/* Root redirect based on role */}
+          {/* Dashboard redirect */}
           <Route
-            path="/"
+            path="/dashboard"
             element={
               !authed ? <Navigate to="/login" replace /> :
-              user?.role === 'ROLE_HOST' ? <Navigate to="/dashboard" replace /> :
+              user?.role === 'ROLE_HOST' ? <Navigate to="/host/dashboard" replace /> :
               <Navigate to="/participant/dashboard" replace />
             }
           />
@@ -103,7 +107,7 @@ function App() {
               </ProtectedRoute>
             }
           >
-            <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/host/dashboard" element={<DashboardPage />} />
             <Route path="/quiz/create" element={<QuizBuilderPage />} />
             <Route path="/quiz/edit/:id" element={<QuizBuilderPage />} />
             <Route path="/analytics" element={<AnalyticsListPage />} />

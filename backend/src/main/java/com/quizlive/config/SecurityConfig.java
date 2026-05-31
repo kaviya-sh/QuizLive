@@ -59,6 +59,8 @@ public class SecurityConfig {
     
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        // Use strength 10 instead of default 10-12 for faster authentication
+        // This is still secure but provides better performance
+        return new BCryptPasswordEncoder(10);
     }
 }

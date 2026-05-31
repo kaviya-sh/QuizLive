@@ -54,11 +54,11 @@ export const JoinQuizPage = () => {
   };
 
   return (
-    <div className="p-8" style={{ fontFamily: '"Inter", sans-serif' }}>
+    <div className="p-4 sm:p-8" style={{ fontFamily: '"Inter", sans-serif' }}>
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-extrabold text-gray-900 mb-1">Join a Quiz</h1>
-        <p className="text-gray-500 font-medium">Enter the room code to join a live quiz session</p>
+      <div className="mb-6 sm:mb-8">
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-1">Join a Quiz</h1>
+        <p className="text-sm sm:text-base text-gray-500 font-medium">Enter the room code to join a live quiz session</p>
       </div>
 
       <div className="max-w-2xl">
@@ -66,14 +66,14 @@ export const JoinQuizPage = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="rounded-2xl shadow-lg p-8"
+          className="rounded-2xl shadow-lg p-4 sm:p-8"
           style={{ background: 'linear-gradient(135deg, #F9FAFB 0%, #F3F4F6 100%)', border: '2px solid #E5E7EB' }}
         >
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #6B7280 0%, #4B5563 100%)' }}>
-              <Zap className="w-6 h-6 text-white" />
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #6B7280 0%, #4B5563 100%)' }}>
+              <Zap className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
             </div>
-            <h2 className="text-2xl font-extrabold text-gray-900">Enter Quiz Details</h2>
+            <h2 className="text-xl sm:text-2xl font-extrabold text-gray-900">Enter Quiz Details</h2>
           </div>
 
           <form onSubmit={handleJoin} className="space-y-6">
@@ -86,7 +86,7 @@ export const JoinQuizPage = () => {
                   onChange={e => setRoomCode(e.target.value.toUpperCase())}
                   placeholder="ABC123"
                   maxLength={6}
-                  className="w-full px-6 py-4 text-center text-3xl font-bold border-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent uppercase tracking-widest transition-all"
+                  className="w-full px-4 sm:px-6 py-3 sm:py-4 text-center text-2xl sm:text-3xl font-bold border-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent uppercase tracking-widest transition-all"
                   style={{ borderColor: '#E5E7EB', background: 'white' }}
                 />
               </div>
@@ -106,13 +106,13 @@ export const JoinQuizPage = () => {
 
             <div>
               <label className="block text-sm font-semibold text-gray-900 mb-3">Choose Your Avatar</label>
-              <div className="grid grid-cols-8 gap-2">
+              <div className="grid grid-cols-8 gap-1 sm:gap-2">
                 {AVATAR_EMOJIS.map(emoji => (
                   <button
                     key={emoji}
                     type="button"
                     onClick={() => setSelectedEmoji(emoji)}
-                    className={`text-3xl p-3 rounded-xl transition-all ${
+                    className={`text-2xl sm:text-3xl p-2 sm:p-3 rounded-xl transition-all ${
                       selectedEmoji === emoji
                         ? 'bg-teal-100 ring-2 ring-teal-500 scale-110'
                         : 'hover:bg-gray-100'
@@ -127,7 +127,7 @@ export const JoinQuizPage = () => {
             <button
               type="submit"
               disabled={joining || !roomCode.trim() || !displayName.trim()}
-              className="w-full text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-all shadow-md hover-lift disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full text-white font-bold py-3 sm:py-4 rounded-xl flex items-center justify-center gap-2 transition-all shadow-md hover-lift disabled:opacity-50 disabled:cursor-not-allowed"
               style={{ background: 'linear-gradient(135deg, #14B8A6 0%, #06B6D4 100%)' }}
             >
               {joining ? (
@@ -143,7 +143,7 @@ export const JoinQuizPage = () => {
         </motion.div>
 
         {/* Info Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6 sm:mt-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

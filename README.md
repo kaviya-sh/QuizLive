@@ -1,8 +1,156 @@
-# QuizLive - Live Quiz Platform
+# sparklo.in - Interactive Live Quiz Platform
 
-A Slido-inspired real-time quiz platform built with React, Spring Boot, WebSocket, and Redis.
+<div align="center">
+  <img src="frontend/public/image/image.png" alt="Sparklo Logo" width="100"/>
+  <h3>Create, Host, and Participate in Live Quizzes</h3>
+  <p>A real-time quiz platform built with React, Spring Boot, WebSocket, and Redis</p>
+  
+  [![Live Demo](https://img.shields.io/badge/demo-live-success)](https://sparklo.in)
+  [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+</div>
 
-## 🚀 Quick Start
+---
+
+## 🌟 Features
+
+### For Hosts
+- 🎯 **Quiz Builder** - Create custom quizzes with multiple question types
+- 🎮 **Live Control Panel** - Manage quiz sessions in real-time
+- 📊 **Analytics Dashboard** - Track participant performance and engagement
+- 🔗 **QR Code Generation** - Easy participant joining via QR codes
+- 📈 **Session History** - Review past quiz sessions and results
+- 🤖 **AI Question Generator** - Generate questions using AI assistance
+
+### For Participants
+- ⚡ **Quick Join** - Enter room code and start playing instantly
+- 🏆 **Live Leaderboard** - Real-time rankings and scoring
+- 🎨 **Avatar Selection** - Choose from fun emoji avatars
+- 📱 **Mobile Optimized** - Fully responsive for phones and tablets
+- 🎯 **Time-Based Scoring** - Faster answers earn more points
+- 🔥 **Streak Bonuses** - Consecutive correct answers boost your score
+
+### Platform Features
+- 🚀 **Real-Time Updates** - WebSocket-powered live interactions
+- 🔐 **Secure Authentication** - JWT-based auth with role management
+- 🎭 **Demo Access** - Try the platform without registration
+- 🌐 **Landing Page** - Clear introduction to platform features
+- 📱 **Mobile First** - Optimized for mobile devices and QR code joining
+
+---
+
+## 🚀 Live Demo
+
+**Website:** [https://sparklo.in](https://sparklo.in)
+
+### Try Demo Access
+1. Visit [sparklo.in](https://sparklo.in)
+2. Click **"Try Demo"** on the login page
+3. Credentials auto-fill: `demo@sparklo.in` / `demo123`
+4. Explore the platform as a participant
+
+### Create Your Own Account
+1. Click **"Sign Up"** on the landing page
+2. Choose your role: **Host** or **Participant**
+3. Start creating or joining quizzes!
+
+---
+
+## 📦 Tech Stack
+
+### Frontend
+- **Framework:** React 18 + TypeScript + Vite
+- **Styling:** TailwindCSS
+- **State Management:** Zustand
+- **Routing:** React Router v6
+- **API Client:** Axios + React Query
+- **WebSocket:** @stomp/stompjs
+- **Charts:** Recharts
+- **Animations:** Framer Motion
+- **Icons:** Lucide React
+
+### Backend
+- **Framework:** Spring Boot 3.2 + Java 21
+- **Security:** Spring Security + JWT
+- **Database:** PostgreSQL + Spring Data JPA
+- **Real-time:** Spring WebSocket + STOMP
+- **Caching:** Redis
+- **Migrations:** Flyway
+- **Storage:** MinIO (S3-compatible)
+- **QR Codes:** ZXing
+
+### Infrastructure
+- **Frontend Hosting:** Vercel
+- **Backend Hosting:** Render
+- **Database:** PostgreSQL (Render)
+- **Cache:** Redis (Render)
+- **Storage:** MinIO
+
+---
+
+## 🏗️ Architecture
+
+```
+┌─────────────────┐
+│   React SPA     │  (Vercel)
+│  sparklo.in     │
+└────────┬────────┘
+         │ HTTPS/WSS
+         ▼
+┌─────────────────┐
+│  Spring Boot    │  (Render)
+│   REST + WS     │
+└────────┬────────┘
+         │
+    ┌────┴────┐
+    ▼         ▼
+┌────────┐ ┌────────┐
+│ PostgreSQL│ │ Redis  │
+└────────┘ └────────┘
+```
+
+---
+
+## 🎮 How to Use
+
+### As a Host
+
+1. **Sign Up** as a Host
+2. **Create a Quiz**
+   - Add questions with multiple choice answers
+   - Set time limits and points
+   - Upload images (optional)
+3. **Start a Session**
+   - Generate a unique room code
+   - Share QR code or room code with participants
+4. **Control the Quiz**
+   - Start when participants are ready
+   - Advance through questions
+   - View live responses and leaderboard
+5. **Review Analytics**
+   - See detailed performance metrics
+   - Export results
+
+### As a Participant
+
+1. **Join a Quiz**
+   - Scan QR code or enter room code
+   - Choose your display name and avatar
+2. **Wait for Start**
+   - See other participants joining
+   - Get ready for the quiz
+3. **Answer Questions**
+   - Read and select your answer
+   - Submit before time runs out
+4. **Track Your Progress**
+   - View your score after each question
+   - See your position on the leaderboard
+5. **View Final Results**
+   - See your final rank
+   - Review your answers
+
+---
+
+## 🛠️ Local Development Setup
 
 ### Prerequisites
 - Node.js 20+
@@ -10,19 +158,26 @@ A Slido-inspired real-time quiz platform built with React, Spring Boot, WebSocke
 - Docker & Docker Compose
 - Maven 3.9+
 
-### 1. Start Infrastructure
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/yourusername/sparklo.git
+cd sparklo/QuizLive
+```
+
+### 2. Start Infrastructure Services
 
 ```bash
 docker-compose up -d
 ```
 
-Services:
-- PostgreSQL: `localhost:5432`
-- Redis: `localhost:6379`
-- MinIO: `localhost:9000` (Console: `localhost:9001`)
-- Mailhog: `localhost:8025`
+This starts:
+- PostgreSQL (port 5432)
+- Redis (port 6379)
+- MinIO (port 9000, console: 9001)
+- Mailhog (port 8025)
 
-### 2. Start Backend
+### 3. Start Backend
 
 ```bash
 cd backend
@@ -32,11 +187,11 @@ mvn spring-boot:run
 
 Backend runs on: `http://localhost:8081`
 
-Verify: 
+**Verify:**
 - Health: http://localhost:8081/actuator/health
-- Swagger: http://localhost:8081/swagger-ui.html
+- API Docs: http://localhost:8081/swagger-ui.html
 
-### 3. Start Frontend
+### 4. Start Frontend
 
 ```bash
 cd frontend
@@ -46,115 +201,174 @@ npm run dev
 
 Frontend runs on: `http://localhost:3000`
 
-### 4. Test Full Flow
+### 5. Test the Application
 
-1. Register as HOST at http://localhost:3000/register
-2. Login and access dashboard
-3. Create a quiz (coming soon)
-4. Start a session and get room code
-5. Open new tab, join as participant
-6. Play quiz end-to-end
+1. Open http://localhost:3000
+2. Register as a Host
+3. Create a quiz
+4. Start a session
+5. Open incognito window and join as participant
+6. Play through the quiz!
 
-## 📦 Tech Stack
+---
 
-### Frontend
-- React 18 + Vite + TypeScript
-- TailwindCSS (Slido green: #198038)
-- Zustand (state management)
-- React Router v6
-- Axios + React Query
-- @stomp/stompjs (WebSocket)
-- Recharts (charts)
-- Framer Motion (animations)
+## 🌐 Deployment
 
-### Backend
-- Spring Boot 3.2 + Java 21
-- Spring Security + JWT
-- Spring Data JPA + PostgreSQL
-- Spring WebSocket + STOMP
-- Spring Data Redis
-- Flyway (migrations)
-- MinIO (file storage)
-- ZXing (QR codes)
+### Frontend (Vercel)
 
-## 🔧 Configuration
+```bash
+cd frontend
+npm run build
+vercel --prod
+```
 
-### Environment Variables
+**Environment Variables:**
+```env
+VITE_API_BASE_URL=https://your-backend.onrender.com/api
+VITE_WS_URL=https://your-backend.onrender.com
+```
 
-Backend (`backend/src/main/resources/application.yml`):
-- Server port: 8081
-- Database: PostgreSQL on localhost:5432
-- Redis: localhost:6379
-- JWT secret: configured in application.yml
+### Backend (Render)
 
-Frontend (`frontend/.env.development`):
-- VITE_API_BASE_URL=http://localhost:8081/api
-- VITE_WS_URL=http://localhost:8081
+1. Create new Web Service on Render
+2. Connect your GitHub repository
+3. Set build command: `cd backend && mvn clean install`
+4. Set start command: `cd backend && java -jar target/quiz-api.jar`
+5. Add environment variables (database, Redis, etc.)
 
-## 📚 API Endpoints
+---
 
-### Authentication (Public)
-- POST `/api/auth/register` - Register new user
-- POST `/api/auth/login` - Login
-- POST `/api/auth/logout` - Logout
+## 📚 API Documentation
 
-### Quizzes (ROLE_HOST)
-- GET `/api/quizzes` - List quizzes
-- POST `/api/quizzes` - Create quiz
-- GET `/api/quizzes/{id}` - Get quiz details
-- PUT `/api/quizzes/{id}` - Update quiz
-- DELETE `/api/quizzes/{id}` - Delete quiz
+### Authentication
+- `POST /api/auth/register` - Register new user
+- `POST /api/auth/login` - Login
+- `POST /api/auth/logout` - Logout
+- `POST /api/auth/refresh` - Refresh access token
 
-### Sessions (ROLE_HOST)
-- POST `/api/sessions` - Create session
-- GET `/api/sessions/{roomCode}` - Get session state
-- PATCH `/api/sessions/{roomCode}/start` - Start session
-- PATCH `/api/sessions/{roomCode}/next` - Next question
-- PATCH `/api/sessions/{roomCode}/end` - End session
-- GET `/api/sessions/{roomCode}/qr` - Get QR code
+### Quizzes (Host Only)
+- `GET /api/quizzes` - List all quizzes
+- `POST /api/quizzes` - Create new quiz
+- `GET /api/quizzes/{id}` - Get quiz details
+- `PUT /api/quizzes/{id}` - Update quiz
+- `DELETE /api/quizzes/{id}` - Delete quiz
+
+### Sessions (Host Only)
+- `POST /api/sessions` - Create session
+- `GET /api/sessions/{roomCode}` - Get session state
+- `PATCH /api/sessions/{roomCode}/start` - Start session
+- `PATCH /api/sessions/{roomCode}/next` - Next question
+- `PATCH /api/sessions/{roomCode}/end` - End session
+- `GET /api/sessions/{roomCode}/qr` - Get QR code
 
 ### Participants (Public)
-- POST `/api/sessions/{roomCode}/join` - Join session
-- GET `/api/sessions/{roomCode}/results` - Get results
+- `POST /api/sessions/{roomCode}/join` - Join session
+- `POST /api/sessions/{roomCode}/answer` - Submit answer
+- `GET /api/sessions/{roomCode}/results` - Get results
 
-## 🎯 Features
+### WebSocket Topics
+- `/topic/session/{roomCode}` - Session state updates
+- `/topic/session/{roomCode}/leaderboard` - Live leaderboard
+- `/topic/session/{roomCode}/question` - Current question
 
-- ✅ JWT-based authentication with refresh tokens
-- ✅ Role-based access control (Host/Participant)
-- ✅ Real-time quiz sessions via WebSocket
-- ✅ Live leaderboards with Redis
-- ✅ Time-based scoring with streak bonuses
-- ✅ QR code generation for easy joining
-- ✅ Dark presenter view for hosts
-- ✅ Animated participant experience
-- ✅ Comprehensive analytics
+---
+
+## 🔐 Environment Variables
+
+### Backend (.env or application.yml)
+```yaml
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/quizlive
+    username: postgres
+    password: postgres
+  redis:
+    host: localhost
+    port: 6379
+  security:
+    jwt:
+      secret: your-secret-key
+      expiration: 86400000
+minio:
+  url: http://localhost:9000
+  access-key: minioadmin
+  secret-key: minioadmin
+```
+
+### Frontend (.env.production)
+```env
+VITE_API_BASE_URL=https://sparklo-in.onrender.com/api
+VITE_WS_URL=https://sparklo-in.onrender.com
+```
+
+---
 
 ## 🧪 Testing
 
-### Backend
+### Backend Tests
 ```bash
 cd backend
 mvn test
 ```
 
-### Frontend
+### Frontend Tests
 ```bash
 cd frontend
 npm run test
 ```
 
-## 🐳 Docker
+---
 
-Build and run with Docker:
+## 📱 Mobile Support
 
-```bash
-docker-compose up -d
-```
+The platform is fully optimized for mobile devices:
+- ✅ Responsive layouts for all screen sizes
+- ✅ Touch-optimized interactions
+- ✅ Mobile-friendly input fields
+- ✅ QR code scanning support
+- ✅ Optimized for portrait and landscape modes
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please follow these steps:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+---
 
 ## 📄 License
 
-MIT License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 👥 Team
+---
 
-Built with ❤️ by the QuizLive team
+## 👥 Authors
+
+Built with ❤️ by the Sparklo team
+
+---
+
+## 🙏 Acknowledgments
+
+- Inspired by Slido and Kahoot
+- Icons by [Lucide](https://lucide.dev/)
+- Fonts by [Google Fonts](https://fonts.google.com/)
+
+---
+
+## 📞 Support
+
+For support, email support@sparklo.in or open an issue on GitHub.
+
+---
+
+<div align="center">
+  <p>Made with ❤️ for interactive learning</p>
+  <p>⭐ Star us on GitHub if you find this project useful!</p>
+</div>

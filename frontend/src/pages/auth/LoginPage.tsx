@@ -21,6 +21,12 @@ export const LoginPage = () => {
   const [forgotEmail, setForgotEmail] = useState('');
   const [sendingReset, setSendingReset] = useState(false);
 
+  const handleDemoLogin = () => {
+    setEmail('demo@sparklo.in');
+    setPassword('demo123');
+    setRole('PARTICIPANT');
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -86,20 +92,22 @@ export const LoginPage = () => {
   return (
     <div className="min-h-screen flex bg-white" style={{ fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif' }}>
       {/* Left Side - Quiz Illustration */}
-      <div className="hidden lg:flex lg:w-1/2 flex-col justify-center items-center relative bg-white">
-        <div className="bg-[#FFF9F0] px-12" style={{ paddingTop: '6.25rem', paddingBottom: '6.25rem' }}>
-          <div className="relative z-10 max-w-2xl w-full">
+      <div className="hidden lg:flex lg:w-1/2 flex-col justify-center items-center relative bg-white" style={{ minWidth: '0' }}>
+        <div className="bg-[#FFF9F0] px-12 w-full" style={{ paddingTop: '6.25rem', paddingBottom: '6.25rem' }}>
+          <div className="relative z-10 max-w-2xl w-full mx-auto">
             <img 
               src="image/quizz.png"
               className="w-full h-auto object-contain"
               alt="Quiz Illustration"
+              loading="eager"
+              style={{ maxWidth: '100%', height: 'auto' }}
             />
           </div>
         </div>
       </div>
 
       {/* Right Side - Login Form */}
-      <div className="flex-1 flex items-center justify-center p-8 bg-white">
+      <div className="flex-1 flex items-center justify-center p-8 bg-white" style={{ minWidth: '0' }}>
         <div className="w-full max-w-md">
           {/* Logo */}
           <div className="text-center mb-10">
@@ -249,6 +257,16 @@ export const LoginPage = () => {
                 </button>
               </form>
 
+              <div className="mt-4">
+                <button
+                  type="button"
+                  onClick={handleDemoLogin}
+                  className="w-full bg-white border-2 border-blue-500 text-blue-600 font-bold py-3.5 rounded-xl hover:bg-blue-50 transition-all duration-200"
+                >
+                  Try Demo
+                </button>
+              </div>
+
               <div className="mt-6 text-center">
                 <p className="text-gray-600 text-sm font-normal">
                   Don't have an account?{' '}
@@ -312,6 +330,33 @@ export const LoginPage = () => {
           )}
         </div>
       </div>
+
+      {/* Mobile Responsive Styles */}
+      <style>{`
+        @media (max-width: 1023px) {
+          .min-h-screen.flex {
+            flex-direction: column !important;
+          }
+          .hidden.lg\:flex {
+            display: none !important;
+          }
+          .flex-1 {
+            width: 100% !important;
+            padding: 1rem !important;
+          }
+        }
+        @media (max-width: 640px) {
+          .max-w-md {
+            max-width: 100% !important;
+          }
+          .rounded-2xl {
+            border-radius: 1rem !important;
+          }
+          .p-8 {
+            padding: 1.5rem !important;
+          }
+        }
+      `}</style>
     </div>
   );
 };

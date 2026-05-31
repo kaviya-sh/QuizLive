@@ -40,21 +40,21 @@ export const RegisterPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50" style={{ fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif' }}>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 p-4" style={{ fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif' }}>
       <div className="flex items-center justify-center min-h-screen">
-        <div className="w-full max-w-2xl mx-8">
-          <div className="text-center pt-8 pb-8">
+        <div className="w-full max-w-2xl">
+          <div className="text-center pt-4 sm:pt-8 pb-4 sm:pb-8">
             <div className="flex items-center justify-center gap-2 mb-2">
-              <img src="/image/image.png" alt="Sparklo Logo" className="w-10 h-10 object-contain" style={{ background: 'transparent', mixBlendMode: 'multiply' }} />
-              <h1 className="text-3xl font-extrabold" style={{ fontFamily: '"Raleway", "Helvetica Neue", sans-serif', fontWeight: '800' }}>
+              <img src="/image/image.png" alt="Sparklo Logo" className="w-8 h-8 sm:w-10 sm:h-10 object-contain" style={{ background: 'transparent', mixBlendMode: 'multiply' }} />
+              <h1 className="text-2xl sm:text-3xl font-extrabold" style={{ fontFamily: '"Raleway", "Helvetica Neue", sans-serif', fontWeight: '800' }}>
                 <span style={{ color: '#1e3a8a' }}>sparklo.in</span>
               </h1>
             </div>
           </div>
 
-          <div style={{ backgroundColor: '#FFFFFF', paddingTop: '2rem', paddingBottom: '2rem', paddingLeft: '0.4rem', paddingRight: '0.4rem', borderRadius: '1rem' }}>
-            <p className="font-semibold text-center mb-8" style={{ fontFamily: '"Inter", sans-serif', fontSize: '20px', color: '#1a1a1a' }}>Get started with sparklo.in</p>
-            <div className="rounded-2xl shadow-xl p-8 border border-gray-100 max-w-md mx-auto" style={{ backgroundColor: '#EFF6FF' }}>
+          <div style={{ backgroundColor: '#FFFFFF', paddingTop: '1.5rem', paddingBottom: '1.5rem', paddingLeft: '0.4rem', paddingRight: '0.4rem', borderRadius: '1rem' }}>
+            <p className="font-semibold text-center mb-6 sm:mb-8 text-lg sm:text-xl" style={{ fontFamily: '"Inter", sans-serif', color: '#1a1a1a' }}>Get started with sparklo.in</p>
+            <div className="rounded-2xl shadow-xl p-4 sm:p-8 border border-gray-100 max-w-md mx-auto" style={{ backgroundColor: '#EFF6FF' }}>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label htmlFor="displayName" className="block text-sm font-bold text-gray-900 mb-2">
