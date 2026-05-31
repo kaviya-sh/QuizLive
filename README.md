@@ -5,8 +5,7 @@
   <h3>Create, Host, and Participate in Live Quizzes</h3>
   <p>A real-time quiz platform built with React, Spring Boot, WebSocket, and Redis</p>
   
-  [![Live Demo](https://img.shields.io/badge/demo-live-success)](https://sparklo.in)
-  [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+  [![Live Demo](https://img.shields.io/badge/demo-live-success)](https://sparklo-in.vercel.app)
 </div>
 
 ---
