@@ -322,11 +322,11 @@ npm run test
 ## 📱 Mobile Support
 
 The platform is fully optimized for mobile devices:
-- ✅ Responsive layouts for all screen sizes
-- ✅ Touch-optimized interactions
-- ✅ Mobile-friendly input fields
-- ✅ QR code scanning support
-- ✅ Optimized for portrait and landscape modes
+-  Responsive layouts for all screen sizes
+-  Touch-optimized interactions
+-  Mobile-friendly input fields
+-  QR code scanning support
+-  Optimized for portrait and landscape modes
 
 ---
 
@@ -339,12 +339,6 @@ Contributions are welcome! Please follow these steps:
 3. Commit your changes (`git commit -m 'Add amazing feature'`)
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
@@ -364,7 +358,7 @@ Built with ❤️ by the Sparklo team
 
 ## 📞 Support
 
-For support, email support@sparklo.in or open an issue on GitHub.
+For support, email sparklo.team.in@gmail.com or open an issue on GitHub.
 
 ---
 
