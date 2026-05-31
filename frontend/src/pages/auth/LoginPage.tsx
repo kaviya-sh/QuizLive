@@ -21,10 +21,16 @@ export const LoginPage = () => {
   const [forgotEmail, setForgotEmail] = useState('');
   const [sendingReset, setSendingReset] = useState(false);
 
-  const handleDemoLogin = () => {
-    setEmail('demo@sparklo.in');
-    setPassword('demo123');
-    setRole('PARTICIPANT');
+  const handleDemoLogin = (demoRole: 'HOST' | 'PARTICIPANT') => {
+    if (demoRole === 'HOST') {
+      setEmail('demohost@sparklo.in');
+      setPassword('demo123');
+      setRole('HOST');
+    } else {
+      setEmail('demo@sparklo.in');
+      setPassword('demo123');
+      setRole('PARTICIPANT');
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -257,14 +263,24 @@ export const LoginPage = () => {
                 </button>
               </form>
 
-              <div className="mt-4">
-                <button
-                  type="button"
-                  onClick={handleDemoLogin}
-                  className="w-full bg-white border-2 border-blue-500 text-blue-600 font-bold py-3.5 rounded-xl hover:bg-blue-50 transition-all duration-200"
-                >
-                  Try Demo
-                </button>
+              <div className="mt-4 space-y-2">
+                <p className="text-center text-sm font-semibold text-gray-700 mb-2">Try Demo Access</p>
+                <div className="grid grid-cols-2 gap-3">
+                  <button
+                    type="button"
+                    onClick={() => handleDemoLogin('HOST')}
+                    className="bg-white border-2 border-purple-500 text-purple-600 font-semibold py-2.5 px-4 rounded-xl hover:bg-purple-50 transition-all duration-200 text-sm"
+                  >
+                    Demo Host
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleDemoLogin('PARTICIPANT')}
+                    className="bg-white border-2 border-teal-500 text-teal-600 font-semibold py-2.5 px-4 rounded-xl hover:bg-teal-50 transition-all duration-200 text-sm"
+                  >
+                    Demo Participant
+                  </button>
+                </div>
               </div>
 
               <div className="mt-6 text-center">

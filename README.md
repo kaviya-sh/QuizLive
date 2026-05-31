@@ -42,10 +42,18 @@
 **Website:** [https://sparklo.in](https://sparklo.in)
 
 ### Try Demo Access
+
+#### Demo Participant
 1. Visit [sparklo.in](https://sparklo.in)
-2. Click **"Try Demo"** on the login page
+2. Click **"Demo Participant"** button on login page
 3. Credentials auto-fill: `demo@sparklo.in` / `demo123`
-4. Explore the platform as a participant
+4. Explore quizzes as a participant
+
+#### Demo Host
+1. Visit [sparklo.in](https://sparklo.in)
+2. Click **"Demo Host"** button on login page
+3. Credentials auto-fill: `demohost@sparklo.in` / `demo123`
+4. Create and manage quizzes as a host
 
 ### Create Your Own Account
 1. Click **"Sign Up"** on the landing page
