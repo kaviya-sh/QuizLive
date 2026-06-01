@@ -92,7 +92,7 @@
 4. Explore quizzes as a participant
 
 #### Demo Host
-1. Visit [sparklo.in](https://sparklo.in)
+1. Visit [sparklo.in](https://sparklo-in.vercel.app)
 2. Click **"Demo Host"** button on login page
 3. Credentials auto-fill: `demohost@sparklo.in` / `demo123`
 4. Create and manage quizzes as a host
