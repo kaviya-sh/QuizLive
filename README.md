@@ -81,12 +81,12 @@
 
 ## 🚀 Live Demo
 
-**Website:** [https://sparklo.in](https://sparklo.in)
+**Website:** [https://sparklo.in](https://sparklo-in.vercel.app)
 
 ### Try Demo Access
 
 #### Demo Participant
-1. Visit [sparklo.in](https://sparklo.in)
+1. Visit [sparklo.in](https://sparklo-in.vercel.app)
 2. Click **"Demo Participant"** button on login page
 3. Credentials auto-fill: `demo@sparklo.in` / `demo123`
 4. Explore quizzes as a participant
