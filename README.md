@@ -36,6 +36,48 @@
 - 📱 **Mobile First** - Optimized for mobile devices and QR code joining
 
 ---
+## Screenshots
+
+### Host Dashboard
+![Host Dashboard](screenshots/hostdashboard.png)
+
+### Create Quiz
+![Create Quiz](screenshots/createquiz.png)
+
+### Host Live Quiz
+![Host Live Quiz](screenshots/hostlivequiz.png)
+
+### Host Response Monitoring
+![Host Response](screenshots/hostresponse.png)
+
+### Analytics Dashboard
+![Analytics](screenshots/analytics.png)
+
+### Entire Host Analytics
+![Entire Host Analytics](screenshots/entirehostanalytics.png)
+
+### Live Sessions
+![Live Sessions](screenshots/livesessions.png)
+
+### Participant Join Quiz
+![Participant Join Quiz](screenshots/participantjoinquiz.png)
+
+### Participant Waiting Room
+![Participant Waiting](screenshots/participantwaiting.png)
+
+### Participant Quiz Interface
+![Participant QA](screenshots/participantqa.png)
+
+### Participant Live Score
+![Participant Live Score](screenshots/participantlivescore.png)
+
+### Participant Quiz History
+![Participant Quiz History](screenshots/participantquizhistory.png)
+
+### Quiz Completion Screen
+![Quiz Completion](screenshots/quizcompletion.png)
+
+---
 
 ## 🚀 Live Demo
 
