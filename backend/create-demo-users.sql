@@ -2,38 +2,38 @@
 -- Run this script in your PostgreSQL database
 
 -- Note: The password 'demo123' is hashed using BCrypt
--- BCrypt hash for 'demo123': $2a$10$rN8qLXqY5Y5Y5Y5Y5Y5Y5eK5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y
+-- BCrypt hash for 'demo123': $2a$10$N9qo8uLOickgx2ZMRZoMye1J8KvCAkYfxTq7lzKJfF.qQYwXfKGDC
 
 -- 1. Demo Participant User
-INSERT INTO users (email, password, display_name, role, created_at, updated_at, enabled)
+INSERT INTO users (email, password_hash, display_name, role, created_at, updated_at, deleted)
 VALUES (
     'demo@sparklo.in',
-    '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', -- BCrypt hash for 'demo123'
+    '$2a$10$N9qo8uLOickgx2ZMRZoMye1J8KvCAkYfxTq7lzKJfF.qQYwXfKGDC', -- BCrypt hash for 'demo123'
     'Demo Participant',
     'ROLE_PARTICIPANT',
     NOW(),
     NOW(),
-    true
+    false
 )
 ON CONFLICT (email) DO UPDATE SET
-    password = EXCLUDED.password,
+    password_hash = EXCLUDED.password_hash,
     display_name = EXCLUDED.display_name,
     role = EXCLUDED.role,
     updated_at = NOW();
 
 -- 2. Demo Host User
-INSERT INTO users (email, password, display_name, role, created_at, updated_at, enabled)
+INSERT INTO users (email, password_hash, display_name, role, created_at, updated_at, deleted)
 VALUES (
     'demohost@sparklo.in',
-    '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', -- BCrypt hash for 'demo123'
+    '$2a$10$N9qo8uLOickgx2ZMRZoMye1J8KvCAkYfxTq7lzKJfF.qQYwXfKGDC', -- BCrypt hash for 'demo123'
     'Demo Host',
     'ROLE_HOST',
     NOW(),
     NOW(),
-    true
+    false
 )
 ON CONFLICT (email) DO UPDATE SET
-    password = EXCLUDED.password,
+    password_hash = EXCLUDED.password_hash,
     display_name = EXCLUDED.display_name,
     role = EXCLUDED.role,
     updated_at = NOW();

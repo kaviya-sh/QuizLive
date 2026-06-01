@@ -40,7 +40,7 @@ export const RegisterPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 p-4" style={{ fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif' }}>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 p-4 register-container" style={{ fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif' }}>
       <div className="flex items-center justify-center min-h-screen">
         <div className="w-full max-w-2xl">
           <div className="text-center pt-4 sm:pt-8 pb-4 sm:pb-8">
@@ -70,8 +70,7 @@ export const RegisterPage = () => {
                   required
                   value={formData.displayName}
                   onChange={(e) => setFormData({ ...formData, displayName: e.target.value })}
-                  className="w-full pl-12 pr-4 py-3.5 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900 placeholder-gray-400"
-                  style={{ backgroundColor: '#FFFFFF !important', WebkitBoxShadow: '0 0 0 1000px white inset' }}
+                  className="w-full pl-12 pr-4 py-3.5 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900 placeholder-gray-400 bg-white"
                   placeholder="John Doe"
                 />
               </div>
@@ -91,8 +90,7 @@ export const RegisterPage = () => {
                   required
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full pl-12 pr-4 py-3.5 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900 placeholder-gray-400"
-                  style={{ backgroundColor: '#FFFFFF !important', WebkitBoxShadow: '0 0 0 1000px white inset' }}
+                  className="w-full pl-12 pr-4 py-3.5 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900 placeholder-gray-400 bg-white"
                   placeholder="you@example.com"
                 />
               </div>
@@ -113,8 +111,7 @@ export const RegisterPage = () => {
                   minLength={6}
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  className="w-full pl-12 pr-4 py-3.5 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900 placeholder-gray-400"
-                  style={{ backgroundColor: '#FFFFFF !important', WebkitBoxShadow: '0 0 0 1000px white inset' }}
+                  className="w-full pl-12 pr-4 py-3.5 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900 placeholder-gray-400 bg-white"
                   placeholder="Minimum 6 characters"
                 />
               </div>
@@ -192,6 +189,18 @@ export const RegisterPage = () => {
           </div>
         </div>
       </div>
+      
+      {/* Responsive Styles */}
+      <style>{`
+        @media (max-width: 640px) {
+          .register-container {
+            padding: 0.5rem !important;
+          }
+          .max-w-2xl {
+            max-width: 100% !important;
+          }
+        }
+      `}</style>
     </div>
   );
 };

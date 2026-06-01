@@ -12,35 +12,35 @@
 -- ========================================
 
 -- Demo Participant User
-INSERT INTO users (email, password, display_name, role, created_at, updated_at, enabled)
+INSERT INTO users (email, password_hash, display_name, role, created_at, updated_at, deleted)
 VALUES (
     'demo@sparklo.in',
-    '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
+    '$2a$10$N9qo8uLOickgx2ZMRZoMye1J8KvCAkYfxTq7lzKJfF.qQYwXfKGDC',
     'Demo Participant',
     'ROLE_PARTICIPANT',
     NOW(),
     NOW(),
-    true
+    false
 )
 ON CONFLICT (email) DO UPDATE SET 
-    password = EXCLUDED.password,
+    password_hash = EXCLUDED.password_hash,
     display_name = EXCLUDED.display_name,
     role = EXCLUDED.role,
     updated_at = NOW();
 
 -- Demo Host User
-INSERT INTO users (email, password, display_name, role, created_at, updated_at, enabled)
+INSERT INTO users (email, password_hash, display_name, role, created_at, updated_at, deleted)
 VALUES (
     'demohost@sparklo.in',
-    '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
+    '$2a$10$N9qo8uLOickgx2ZMRZoMye1J8KvCAkYfxTq7lzKJfF.qQYwXfKGDC',
     'Demo Host',
     'ROLE_HOST',
     NOW(),
     NOW(),
-    true
+    false
 )
 ON CONFLICT (email) DO UPDATE SET 
-    password = EXCLUDED.password,
+    password_hash = EXCLUDED.password_hash,
     display_name = EXCLUDED.display_name,
     role = EXCLUDED.role,
     updated_at = NOW();

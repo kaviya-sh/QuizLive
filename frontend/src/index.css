@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap');
+@import './styles/mobile-optimization.css';
 
 @layer base {
   :root {
@@ -30,23 +31,68 @@
 
   * {
     @apply border-border;
+    box-sizing: border-box;
+  }
+  
+  html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
   }
   
   body {
     @apply bg-background text-foreground;
     font-family: 'Inter', sans-serif;
-  }
-
-  html {
-    -webkit-text-size-adjust: 100%;
-    touch-action: manipulation;
+    min-height: 100vh;
+    overflow-x: hidden;
   }
 }
 
 @layer utilities {
+  /* Mobile optimization */
   @media (max-width: 768px) {
     .mobile-optimized {
       font-size: 16px !important;
+    }
+    
+    input, select, textarea, button {
+      font-size: 16px !important;
+    }
+  }
+  
+  /* Responsive containers */
+  .responsive-container {
+    width: 100%;
+    max-width: 100%;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  @media (min-width: 640px) {
+    .responsive-container {
+      max-width: 640px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+  
+  @media (min-width: 768px) {
+    .responsive-container {
+      max-width: 768px;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .responsive-container {
+      max-width: 1024px;
+    }
+  }
+  
+  @media (min-width: 1280px) {
+    .responsive-container {
+      max-width: 1280px;
     }
   }
 }

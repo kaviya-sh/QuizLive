@@ -16,7 +16,7 @@ export const ParticipantLayout = () => {
   return (
     <div className="flex min-h-screen">
       <Sidebar navItems={PARTICIPANT_NAV} brandLabel="sparklo.in" onSettingsClick={() => setSettingsOpen(true)} />
-      <main className="flex-1 ml-60 min-h-screen overflow-y-auto bg-gray-50">
+      <main className="flex-1 lg:ml-60 min-h-screen overflow-y-auto bg-gray-50">
         <Outlet />
       </main>
       <ParticipantSettings isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />

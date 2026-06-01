@@ -85,14 +85,14 @@ export const DashboardPage = () => {
     <div className="min-h-screen bg-gray-50" style={{ fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif' }}>
 
       {/* Welcome */}
-      <div className="max-w-7xl mx-auto px-6 py-8">
-        <div className="mb-8">
-          <h2 className="text-3xl font-extrabold text-gray-900 mb-2">Welcome back, {user?.displayName}!</h2>
-          <p className="text-gray-600 font-normal">Manage your quizzes and track your sessions</p>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+        <div className="mb-6 sm:mb-8">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-2">Welcome back, {user?.displayName}!</h2>
+          <p className="text-sm sm:text-base text-gray-600 font-normal">Manage your quizzes and track your sessions</p>
         </div>
       </div>
 
-      <main className="max-w-7xl mx-auto px-6 pb-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 pb-6 sm:pb-8">
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="bg-blue-50 rounded-2xl shadow-xl p-6 border border-blue-200">
@@ -131,14 +131,14 @@ export const DashboardPage = () => {
         </div>
 
         {/* My Quizzes header */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
           <div>
-            <h2 className="text-3xl font-extrabold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">My Quizzes</h2>
-            <p className="text-gray-600 font-normal">Create and manage your interactive quizzes</p>
+            <h2 className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">My Quizzes</h2>
+            <p className="text-sm sm:text-base text-gray-600 font-normal">Create and manage your interactive quizzes</p>
           </div>
           <button
             onClick={() => navigate('/quiz/create')}
-            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-xl transition-all shadow-lg hover:shadow-xl flex items-center gap-2"
+            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2.5 sm:py-3 px-4 sm:px-6 rounded-xl transition-all shadow-lg hover:shadow-xl flex items-center gap-2 text-sm sm:text-base w-full sm:w-auto justify-center"
           >
             <Plus className="w-5 h-5" />
             <span>Create Quiz</span>

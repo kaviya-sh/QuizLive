@@ -1,6 +1,7 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
-import { LucideIcon, LogOut, Settings } from 'lucide-react';
+import { LucideIcon, LogOut, Settings, Menu, X } from 'lucide-react';
+import { useState } from 'react';
 
 interface NavItem {
   label: string;
@@ -17,6 +18,7 @@ interface SidebarProps {
 export const Sidebar = ({ navItems, brandLabel, onSettingsClick }: SidebarProps) => {
   const navigate = useNavigate();
   const { user, clearAuth } = useAuthStore();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleLogout = () => {
     clearAuth();
@@ -24,13 +26,33 @@ export const Sidebar = ({ navItems, brandLabel, onSettingsClick }: SidebarProps)
   };
 
   return (
-    <aside
-      className="fixed left-0 top-0 h-full w-60 flex flex-col z-20"
-      style={{
-        background: 'linear-gradient(180deg, #1e3a5f 0%, #1a2f4e 100%)',
-        boxShadow: '4px 0 20px rgba(0,0,0,0.15)',
-      }}
-    >
+    <>
+      {/* Mobile Menu Button */}
+      <button
+        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+        className="lg:hidden fixed top-4 left-4 z-50 p-2 rounded-lg bg-blue-600 text-white shadow-lg"
+      >
+        {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+      </button>
+
+      {/* Overlay for mobile */}
+      {mobileMenuOpen && (
+        <div
+          className="lg:hidden fixed inset-0 bg-black/50 z-30"
+          onClick={() => setMobileMenuOpen(false)}
+        />
+      )}
+
+      {/* Sidebar */}
+      <aside
+        className={`fixed left-0 top-0 h-full w-60 flex flex-col z-40 transition-transform duration-300 lg:translate-x-0 ${
+          mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}
+        style={{
+          background: 'linear-gradient(180deg, #1e3a5f 0%, #1a2f4e 100%)',
+          boxShadow: '4px 0 20px rgba(0,0,0,0.15)',
+        }}
+      >
       {/* Brand */}
       <div className="flex items-center gap-2 px-5 py-5 border-b border-white/10">
         <img
@@ -72,6 +94,7 @@ export const Sidebar = ({ navItems, brandLabel, onSettingsClick }: SidebarProps)
             key={path}
             to={path}
             end
+            onClick={() => setMobileMenuOpen(false)}
             className={({ isActive }) =>
               `flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-150 ${
                 isActive
@@ -106,5 +129,6 @@ export const Sidebar = ({ navItems, brandLabel, onSettingsClick }: SidebarProps)
         </button>
       </div>
     </aside>
+    </>
   );
 };

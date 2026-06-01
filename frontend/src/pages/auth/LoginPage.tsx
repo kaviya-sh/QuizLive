@@ -96,13 +96,13 @@ export const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex bg-white" style={{ fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif' }}>
+    <div className="min-h-screen flex bg-white login-container" style={{ fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif' }}>
       {/* Left Side - Quiz Illustration */}
-      <div className="hidden lg:flex lg:w-1/2 flex-col justify-center items-center relative bg-white" style={{ minWidth: '0' }}>
+      <div className="login-illustration-side lg:w-1/2 flex-col justify-center items-center relative bg-white" style={{ minWidth: '0', display: 'none' }}>
         <div className="bg-[#FFF9F0] px-12 w-full" style={{ paddingTop: '6.25rem', paddingBottom: '6.25rem' }}>
           <div className="relative z-10 max-w-2xl w-full mx-auto">
             <img 
-              src="image/quizz.png"
+              src="/image/quizz.png"
               className="w-full h-auto object-contain"
               alt="Quiz Illustration"
               loading="eager"
@@ -113,7 +113,7 @@ export const LoginPage = () => {
       </div>
 
       {/* Right Side - Login Form */}
-      <div className="flex-1 flex items-center justify-center p-8 bg-white" style={{ minWidth: '0' }}>
+      <div className="flex-1 flex items-center justify-center p-8 bg-white login-form-side" style={{ minWidth: '0' }}>
         <div className="w-full max-w-md">
           {/* Logo */}
           <div className="text-center mb-10">
@@ -347,20 +347,32 @@ export const LoginPage = () => {
         </div>
       </div>
 
-      {/* Mobile Responsive Styles */}
+      {/* Responsive Styles */}
       <style>{`
+        /* Desktop styles (default) */
+        @media (min-width: 1024px) {
+          .login-illustration-side {
+            display: flex !important;
+          }
+          .login-container {
+            flex-direction: row !important;
+          }
+        }
+        
+        /* Mobile styles */
         @media (max-width: 1023px) {
-          .min-h-screen.flex {
+          .login-container {
             flex-direction: column !important;
           }
-          .hidden.lg\:flex {
+          .login-illustration-side {
             display: none !important;
           }
-          .flex-1 {
+          .login-form-side {
             width: 100% !important;
             padding: 1rem !important;
           }
         }
+        
         @media (max-width: 640px) {
           .max-w-md {
             max-width: 100% !important;

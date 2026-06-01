@@ -17,7 +17,7 @@ export const HostLayout = () => {
   return (
     <div className="flex min-h-screen">
       <Sidebar navItems={HOST_NAV} onSettingsClick={() => setSettingsOpen(true)} />
-      <main className="flex-1 ml-60 min-h-screen overflow-y-auto bg-gray-50">
+      <main className="flex-1 lg:ml-60 min-h-screen overflow-y-auto bg-gray-50">
         <Outlet />
       </main>
       <HostSettings isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />

@@ -154,7 +154,7 @@ export const ForgotPasswordPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-8 bg-gradient-to-br from-blue-50 to-indigo-50" style={{ fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif' }}>
+    <div className="min-h-screen flex items-center justify-center p-4 sm:p-8 bg-gradient-to-br from-blue-50 to-indigo-50 forgot-password-container" style={{ fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif' }}>
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-2 mb-3">
@@ -171,7 +171,7 @@ export const ForgotPasswordPage = () => {
           </p>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-lg p-8">
+        <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-8">
           {step === 'email' && (
             <form onSubmit={handleSendOtp} className="space-y-4">
               <div>
@@ -227,11 +227,13 @@ export const ForgotPasswordPage = () => {
                     key={index}
                     id={`otp-${index}`}
                     type="text"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
                     maxLength={1}
                     value={digit}
                     onChange={(e) => handleOtpChange(index, e.target.value)}
                     onKeyDown={(e) => handleOtpKeyDown(index, e)}
-                    className="w-12 h-12 text-center text-xl font-bold border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+                    className="w-10 h-10 sm:w-12 sm:h-12 text-center text-lg sm:text-xl font-bold border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
                   />
                 ))}
               </div>
@@ -377,6 +379,18 @@ export const ForgotPasswordPage = () => {
           )}
         </div>
       </div>
+      
+      {/* Responsive Styles */}
+      <style>{`
+        @media (max-width: 640px) {
+          .forgot-password-container {
+            padding: 1rem !important;
+          }
+          .max-w-md {
+            max-width: 100% !important;
+          }
+        }
+      `}</style>
     </div>
   );
 };
