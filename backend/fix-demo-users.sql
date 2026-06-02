@@ -1,9 +1,10 @@
--- Demo Users Setup Script for sparklo.in
--- Run this script in your PostgreSQL database
+-- ========================================
+-- CORRECT Demo Users Setup for Production
+-- ========================================
 -- Password: demo123
--- BCrypt hash (strength 10): $2a$10$ZtiYs7oR1i571MkFyrGKwOOhqWm0VgC91nYFMbeXvIPyp5aOXtoL2
+-- BCrypt Hash (strength 10): $2a$10$ZtiYs7oR1i571MkFyrGKwOOhqWm0VgC91nYFMbeXvIPyp5aOXtoL2
 
--- 1. Demo Participant User
+-- Demo Participant User
 INSERT INTO users (email, password_hash, display_name, role, created_at, updated_at, deleted)
 VALUES (
     'demo@sparklo.in',
@@ -14,13 +15,13 @@ VALUES (
     NOW(),
     false
 )
-ON CONFLICT (email) DO UPDATE SET
+ON CONFLICT (email) DO UPDATE SET 
     password_hash = EXCLUDED.password_hash,
     display_name = EXCLUDED.display_name,
     role = EXCLUDED.role,
     updated_at = NOW();
 
--- 2. Demo Host User
+-- Demo Host User
 INSERT INTO users (email, password_hash, display_name, role, created_at, updated_at, deleted)
 VALUES (
     'demohost@sparklo.in',
@@ -31,19 +32,19 @@ VALUES (
     NOW(),
     false
 )
-ON CONFLICT (email) DO UPDATE SET
+ON CONFLICT (email) DO UPDATE SET 
     password_hash = EXCLUDED.password_hash,
     display_name = EXCLUDED.display_name,
     role = EXCLUDED.role,
     updated_at = NOW();
 
--- Verify the demo users were created
-SELECT id, email, display_name, role, deleted, created_at 
+-- Verify the users were created
+SELECT 
+    id, 
+    email, 
+    display_name, 
+    role, 
+    deleted,
+    created_at 
 FROM users 
 WHERE email IN ('demo@sparklo.in', 'demohost@sparklo.in');
-
--- IMPORTANT NOTES:
--- 1. The BCrypt hash above is for the password 'demo123' with strength 10
--- 2. Column name is 'password_hash' (not 'password')
--- 3. To generate a new BCrypt hash, run:
---    cd backend && mvn exec:java -Dexec.mainClass="com.quizlive.util.PasswordHashGenerator"

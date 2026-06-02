@@ -76,16 +76,34 @@ public class AuthService {
     
     @Transactional(readOnly = true)
     public AuthResponse login(LoginRequest request, HttpServletResponse response) {
+        System.out.println("[LOGIN] Attempting login for email: " + request.getEmail());
+        
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> ApiException.unauthorized("Invalid credentials"));
+                .orElseThrow(() -> {
+                    System.out.println("[LOGIN] User not found: " + request.getEmail());
+                    return ApiException.unauthorized("Invalid credentials");
+                });
+        
+        System.out.println("[LOGIN] User found: " + user.getEmail());
+        System.out.println("[LOGIN] User role: " + user.getRole());
+        System.out.println("[LOGIN] User deleted: " + user.getDeleted());
+        System.out.println("[LOGIN] Password hash starts with: " + user.getPasswordHash().substring(0, 20) + "...");
         
         if (user.getDeleted()) {
+            System.out.println("[LOGIN] Account is disabled");
             throw ApiException.unauthorized("Account is disabled");
         }
         
-        if (!passwordEncoder.matches(request.getPassword(), user.getPasswordHash())) {
+        System.out.println("[LOGIN] Checking password match...");
+        boolean passwordMatches = passwordEncoder.matches(request.getPassword(), user.getPasswordHash());
+        System.out.println("[LOGIN] Password matches: " + passwordMatches);
+        
+        if (!passwordMatches) {
+            System.out.println("[LOGIN] Password mismatch for user: " + request.getEmail());
             throw ApiException.unauthorized("Invalid credentials");
         }
+        
+        System.out.println("[LOGIN] Login successful for: " + user.getEmail());
         
         String accessToken = jwtUtil.generateAccessToken(user.getId(), user.getEmail(), user.getRole());
         String refreshToken = jwtUtil.generateRefreshToken(user.getId());
