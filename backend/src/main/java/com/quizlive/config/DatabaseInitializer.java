@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.List;
+
 @Configuration
 @RequiredArgsConstructor
 @Slf4j
@@ -21,22 +23,46 @@ public class DatabaseInitializer {
     public CommandLineRunner initDatabase() {
         return args -> {
             log.info("=".repeat(60));
-            log.info("INITIALIZING DEMO USERS");
+            log.info("DATABASE INITIALIZATION CHECK");
             log.info("=".repeat(60));
             
-            // Correct BCrypt hash for "demo123" with strength 10
-            String correctHash = "$2a$10$ZtiYs7oR1i571MkFyrGKwOOhqWm0VgC91nYFMbeXvIPyp5aOXtoL2";
+            // Generate demo password hash using the same encoder as the app
+            String demoPasswordHash = passwordEncoder.encode("demo123");
             
             // Create or update demo participant
-            createOrUpdateUser("demo@sparklo.in", correctHash, "Demo Participant", "ROLE_PARTICIPANT");
+            createOrUpdateUser("demo@sparklo.in", demoPasswordHash, "Demo Participant", "ROLE_PARTICIPANT");
             
             // Create or update demo host
-            createOrUpdateUser("demohost@sparklo.in", correctHash, "Demo Host", "ROLE_HOST");
+            createOrUpdateUser("demohost@sparklo.in", demoPasswordHash, "Demo Host", "ROLE_HOST");
+            
+            // Check all users for password hash issues
+            log.info("Checking all users for password hash format...");
+            List<User> allUsers = userRepository.findAll();
+            int invalidCount = 0;
+            
+            for (User user : allUsers) {
+                String hash = user.getPasswordHash();
+                // Valid BCrypt hash should start with $2a$ or $2b$
+                if (hash == null || (!hash.startsWith("$2a$") && !hash.startsWith("$2b$"))) {
+                    log.warn("⚠ User {} has invalid or non-standard BCrypt hash: {}", 
+                            user.getEmail(), 
+                            hash != null ? hash.substring(0, Math.min(20, hash.length())) + "..." : "NULL");
+                    invalidCount++;
+                }
+            }
+            
+            if (invalidCount > 0) {
+                log.warn("=".repeat(60));
+                log.warn("ATTENTION: {} users have non-standard password hashes!", invalidCount);
+                log.warn("These users may experience login issues.");
+                log.warn("Users should use 'Forgot Password' to reset their passwords.");
+                log.warn("=".repeat(60));
+            }
             
             log.info("=".repeat(60));
-            log.info("DEMO USERS INITIALIZATION COMPLETE");
-            log.info("Login with: demo@sparklo.in or demohost@sparklo.in");
-            log.info("Password: demo123");
+            log.info("DATABASE INITIALIZATION COMPLETE");
+            log.info("Total users: {}, Users with issues: {}", allUsers.size(), invalidCount);
+            log.info("Demo login - Email: demo@sparklo.in | Password: demo123");
             log.info("=".repeat(60));
         };
     }
