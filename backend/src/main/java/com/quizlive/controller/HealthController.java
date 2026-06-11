@@ -9,7 +9,7 @@ import java.util.Map;
 @RestController
 public class HealthController {
     
-    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(8);
     
     @GetMapping("/")
     public Map<String, String> root() {
@@ -17,6 +17,14 @@ public class HealthController {
             "status", "running",
             "service", "QuizLive Backend API",
             "docs", "/swagger-ui.html"
+        );
+    }
+    
+    @GetMapping("/api/health")
+    public Map<String, String> health() {
+        return Map.of(
+            "status", "healthy",
+            "timestamp", String.valueOf(System.currentTimeMillis())
         );
     }
     

@@ -42,16 +42,24 @@ export const ForgotPasswordPage = () => {
 
   const handleSendOtp = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!email || !email.trim()) {
+      toast.error('Please enter your email address');
+      return;
+    }
+
     setLoading(true);
 
     try {
-      await authApi.forgotPassword(email);
-      toast.success('OTP sent to your email!');
+      const response = await authApi.forgotPassword(email);
+      toast.success('OTP sent to your email! Please check your inbox.');
       setStep('otp');
       setTimer(300);
       setCanResend(false);
     } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Failed to send OTP');
+      console.error('Forgot password error:', error);
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to send OTP. Please try again.';
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }

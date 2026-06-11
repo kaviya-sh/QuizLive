@@ -8,8 +8,8 @@ export default defineConfig({
     global: 'window',
   },
   server: {
-    port: 3000,
-    strictPort: true,
+    port: 5173,
+    strictPort: false,
     host: true,
     proxy: {
       '/api': {

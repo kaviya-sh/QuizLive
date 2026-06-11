@@ -77,10 +77,10 @@ cloudinary:
   api-secret: n_HqOp9_yYQc05a9ZyWqQGka4vY
 
 cors:
-  allowed-origins: http://localhost:3000
+  allowed-origins: http://localhost:5173,http://localhost:3000
 
 websocket:
-  allowed-origins: http://localhost:3000
+  allowed-origins: http://localhost:5173,http://localhost:3000
 
 app:
   frontend:

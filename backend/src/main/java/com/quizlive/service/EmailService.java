@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
-@ConditionalOnProperty(name = "spring.mail.host")
 public class EmailService {
 
     @Autowired(required = false)
@@ -57,8 +56,8 @@ public class EmailService {
 
     public void sendOtp(String toEmail, String otp) {
         if (mailSender == null) {
-            log.warn("Mail sender not configured. Skipping OTP email to: {}", toEmail);
-            return;
+            log.error("Mail sender not configured. Cannot send OTP email to: {}", toEmail);
+            throw new RuntimeException("Email service is not configured");
         }
         try {
             SimpleMailMessage message = new SimpleMailMessage();
@@ -76,9 +75,10 @@ public class EmailService {
             message.setText(emailBody);
             mailSender.send(message);
             
-            log.info("OTP email sent to: {}", toEmail);
+            log.info("OTP email sent successfully to: {}", toEmail);
         } catch (Exception e) {
             log.error("Failed to send OTP email to: {}", toEmail, e);
+            throw new RuntimeException("Failed to send OTP email: " + e.getMessage());
         }
     }
 }

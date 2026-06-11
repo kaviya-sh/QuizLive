@@ -76,34 +76,16 @@ public class AuthService {
     
     @Transactional(readOnly = true)
     public AuthResponse login(LoginRequest request, HttpServletResponse response) {
-        System.out.println("[LOGIN] Attempting login for email: " + request.getEmail());
-        
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> {
-                    System.out.println("[LOGIN] User not found: " + request.getEmail());
-                    return ApiException.unauthorized("Invalid credentials");
-                });
-        
-        System.out.println("[LOGIN] User found: " + user.getEmail());
-        System.out.println("[LOGIN] User role: " + user.getRole());
-        System.out.println("[LOGIN] User deleted: " + user.getDeleted());
-        System.out.println("[LOGIN] Password hash starts with: " + user.getPasswordHash().substring(0, 20) + "...");
+                .orElseThrow(() -> ApiException.unauthorized("Invalid credentials"));
         
         if (user.getDeleted()) {
-            System.out.println("[LOGIN] Account is disabled");
             throw ApiException.unauthorized("Account is disabled");
         }
         
-        System.out.println("[LOGIN] Checking password match...");
-        boolean passwordMatches = passwordEncoder.matches(request.getPassword(), user.getPasswordHash());
-        System.out.println("[LOGIN] Password matches: " + passwordMatches);
-        
-        if (!passwordMatches) {
-            System.out.println("[LOGIN] Password mismatch for user: " + request.getEmail());
+        if (!passwordEncoder.matches(request.getPassword(), user.getPasswordHash())) {
             throw ApiException.unauthorized("Invalid credentials");
         }
-        
-        System.out.println("[LOGIN] Login successful for: " + user.getEmail());
         
         String accessToken = jwtUtil.generateAccessToken(user.getId(), user.getEmail(), user.getRole());
         String refreshToken = jwtUtil.generateRefreshToken(user.getId());
@@ -138,7 +120,7 @@ public class AuthService {
     @Transactional
     public String forgotPassword(String email) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> ApiException.notFound("User not found"));
+                .orElseThrow(() -> ApiException.notFound("No account found with this email address"));
 
         String otp = String.valueOf(100000 + new Random().nextInt(900000));
 
@@ -146,9 +128,12 @@ public class AuthService {
         user.setOtpGeneratedTime(LocalDateTime.now());
         userRepository.save(user);
 
-        emailService.sendOtp(email, otp);
-
-        return "OTP sent successfully";
+        try {
+            emailService.sendOtp(email, otp);
+            return "OTP sent successfully to your email";
+        } catch (Exception e) {
+            throw ApiException.internalError("Failed to send OTP email. Please try again later.");
+        }
     }
 
     @Transactional(readOnly = true)
