@@ -132,7 +132,7 @@ public class AuthService {
             emailService.sendOtp(email, otp);
             return "OTP sent successfully to your email";
         } catch (Exception e) {
-            throw ApiException.internalError("Failed to send OTP email. Please try again later.");
+            throw ApiException.badRequest("Failed to send OTP email. Please try again later.");
         }
     }
 
