@@ -4,7 +4,7 @@ import { quizApi } from '@/api/quiz'
 
 export const useAutosave = (enabled: boolean = true) => {
   const { quiz, setSaving, setLastSaved } = useQuizBuilderStore()
-  const timeoutRef = useRef<number>()
+  const timeoutRef = useRef<ReturnType<typeof setTimeout>>()
   const lastQuizRef = useRef<string>()
 
   useEffect(() => {

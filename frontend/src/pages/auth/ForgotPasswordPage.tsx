@@ -51,7 +51,7 @@ export const ForgotPasswordPage = () => {
     setLoading(true);
 
     try {
-      const response = await authApi.forgotPassword(email);
+      await authApi.forgotPassword(email);
       toast.success('OTP sent to your email! Please check your inbox.');
       setStep('otp');
       setTimer(300);
