@@ -125,20 +125,19 @@ public class AuthService {
                 .orElseThrow(() -> ApiException.notFound("No account found with this email address"));
 
         String otp = String.valueOf(100000 + new Random().nextInt(900000));
+        log.info("========================================");
+        log.info("FORGOT PASSWORD REQUEST");
+        log.info("Email: {}", email);
+        log.info("Generated OTP: {}", otp);
+        log.info("========================================");
 
         user.setOtp(otp);
         user.setOtpGeneratedTime(LocalDateTime.now());
         userRepository.save(user);
 
-        try {
-            emailService.sendOtp(email, otp);
-        } catch (Exception e) {
-            log.error("Email failed but continuing: {}", e.getMessage());
-        }
+        emailService.sendOtp(email, otp);
         
-        // Always return success so user can proceed to OTP screen
-        // OTP is logged in server logs if email fails
-        return "OTP sent successfully to your email";
+        return "OTP sent successfully. Check server logs if not received.";
     }
 
     @Transactional(readOnly = true)

@@ -50,13 +50,8 @@ public class AuthController {
     
     @PostMapping("/forgot-password")
     public ResponseEntity<Map<String, String>> forgotPassword(@RequestParam String email) {
-        try {
-            String message = authService.forgotPassword(email);
-            return ResponseEntity.ok(Map.of("message", message));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("message", e.getMessage() != null ? e.getMessage() : "Failed to send OTP"));
-        }
+        String result = authService.forgotPassword(email);
+        return ResponseEntity.ok(Map.of("message", result));
     }
     
     @PostMapping("/verify-otp")
