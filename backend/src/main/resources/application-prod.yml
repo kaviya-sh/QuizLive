@@ -53,9 +53,9 @@ spring:
             required: false
           ssl:
             trust: smtp.gmail.com
-          connectiontimeout: 10000
-          timeout: 10000
-          writetimeout: 10000
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
 
   servlet:
     multipart:
@@ -115,6 +115,8 @@ management:
       show-details: always
   health:
     redis:
+      enabled: false
+    mail:
       enabled: false
 
 logging:

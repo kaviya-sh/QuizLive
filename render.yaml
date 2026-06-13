@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: sparklo-in
+    runtime: docker
+    plan: free
+    region: oregon
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: PORT
+        value: 8081
+    healthCheckPath: /actuator/health
