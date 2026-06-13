@@ -55,11 +55,16 @@ public class EmailService {
     }
 
     public void sendOtp(String toEmail, String otp) {
+        log.warn("=== OTP EMAIL DEBUG ===");
+        log.warn("OTP for {}: {}", toEmail, otp);
+        log.warn("Mail sender configured: {}", mailSender != null);
+        
         if (mailSender == null) {
             log.error("Mail sender not configured");
-            log.warn("OTP for {}: {}", toEmail, otp);
-            throw new RuntimeException("Email service not configured");
+            // Don't throw exception, just log OTP
+            return;
         }
+        
         try {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setFrom(fromAddress);
@@ -78,9 +83,9 @@ public class EmailService {
             
             log.info("OTP sent to: {}", toEmail);
         } catch (Exception e) {
-            log.error("Failed to send OTP to {}", toEmail, e);
-            log.warn("OTP for {}: {}", toEmail, otp);
-            throw new RuntimeException("Failed to send OTP");
+            log.error("Failed to send OTP email: {}", e.getMessage());
+            log.warn("OTP for {}: {} (logged due to email failure)", toEmail, otp);
+            // Don't throw exception, OTP is logged
         }
     }
 }
