@@ -40,7 +40,7 @@ spring:
 
   mail:
     host: ${MAIL_HOST:smtp.gmail.com}
-    port: ${MAIL_PORT:587}
+    port: ${MAIL_PORT:465}
     username: ${MAIL_USERNAME:sparklo.team.in@gmail.com}
     password: ${MAIL_PASSWORD:cuckcgkrxtfhxmzo}
     from: ${MAIL_FROM:sparklo.team.in@gmail.com}
@@ -48,11 +48,12 @@ spring:
       mail:
         smtp:
           auth: true
-          starttls:
-            enable: true
-            required: false
           ssl:
+            enable: true
             trust: smtp.gmail.com
+          socketFactory:
+            port: 465
+            class: javax.net.ssl.SSLSocketFactory
           connectiontimeout: 5000
           timeout: 5000
           writetimeout: 5000
