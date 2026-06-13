@@ -99,6 +99,8 @@ app:
 sendgrid:
   api:
     key: ${SENDGRID_API_KEY:}
+  from:
+    email: ${SENDGRID_FROM_EMAIL:sparklo.team.in@gmail.com}
 
 springdoc:
   api-docs:

@@ -15,7 +15,7 @@ public class EmailService {
     @Value("${sendgrid.api.key:}")
     private String sendGridApiKey;
 
-    @Value("${spring.mail.from:noreply@sparklo.in}")
+    @Value("${sendgrid.from.email:}")
     private String fromAddress;
 
     public void sendOtp(String toEmail, String otp) {
