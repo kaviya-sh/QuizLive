@@ -81,15 +81,11 @@ public class DatabaseInitializer {
             userRepository.save(user);
             log.info("✓ Created user: {} ({})", email, role);
         } else {
-            // Update password if it's different
-            if (!user.getPasswordHash().equals(passwordHash)) {
-                user.setPasswordHash(passwordHash);
-                user.setDeleted(false);
-                userRepository.save(user);
-                log.info("✓ Updated password for: {} ({})", email, role);
-            } else {
-                log.info("✓ User already exists with correct password: {} ({})", email, role);
-            }
+            // Always update password to ensure BCrypt strength consistency
+            user.setPasswordHash(passwordHash);
+            user.setDeleted(false);
+            userRepository.save(user);
+            log.info("✓ Updated password for: {} ({})", email, role);
         }
     }
 }
