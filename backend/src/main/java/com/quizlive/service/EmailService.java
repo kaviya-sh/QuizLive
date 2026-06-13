@@ -19,11 +19,14 @@ public class EmailService {
     private String fromAddress;
 
     public void sendOtp(String toEmail, String otp) {
+        log.info("=== SENDGRID EMAIL DEBUG ===");
         log.info("Sending OTP to: {}", toEmail);
         log.info("OTP: {}", otp);
+        log.info("SendGrid API Key configured: {}", sendGridApiKey != null && !sendGridApiKey.isEmpty());
+        log.info("From address: {}", fromAddress);
         
         if (sendGridApiKey == null || sendGridApiKey.isEmpty()) {
-            log.error("SendGrid API key not configured");
+            log.error("SendGrid API key not configured - OTP cannot be sent");
             return;
         }
         
@@ -42,6 +45,7 @@ public class EmailService {
             Content content = new Content("text/plain", emailBody);
             Mail mail = new Mail(from, subject, to, content);
             
+            log.info("Calling SendGrid API...");
             SendGrid sg = new SendGrid(sendGridApiKey);
             Request request = new Request();
             request.setMethod(Method.POST);
@@ -50,13 +54,16 @@ public class EmailService {
             
             Response response = sg.api(request);
             
+            log.info("SendGrid response code: {}", response.getStatusCode());
+            log.info("SendGrid response body: {}", response.getBody());
+            
             if (response.getStatusCode() >= 200 && response.getStatusCode() < 300) {
-                log.info("OTP sent successfully via SendGrid to: {}", toEmail);
+                log.info("✓ OTP sent successfully via SendGrid to: {}", toEmail);
             } else {
-                log.error("SendGrid error code {}: {}", response.getStatusCode(), response.getBody());
+                log.error("✗ SendGrid error code {}: {}", response.getStatusCode(), response.getBody());
             }
         } catch (Exception e) {
-            log.error("Failed to send OTP via SendGrid: {}", e.getMessage(), e);
+            log.error("✗ Exception sending OTP via SendGrid: {}", e.getMessage(), e);
         }
     }
 
