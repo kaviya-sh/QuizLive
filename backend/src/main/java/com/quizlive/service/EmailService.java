@@ -1,9 +1,6 @@
 package com.quizlive.service;
 
-import com.sendgrid.Method;
-import com.sendgrid.Request;
-import com.sendgrid.Response;
-import com.sendgrid.SendGrid;
+import com.sendgrid.*;
 import com.sendgrid.helpers.mail.Mail;
 import com.sendgrid.helpers.mail.objects.Content;
 import com.sendgrid.helpers.mail.objects.Email;
@@ -22,8 +19,8 @@ public class EmailService {
     private String fromAddress;
 
     public void sendOtp(String toEmail, String otp) {
-        log.warn("=== OTP EMAIL DEBUG ===");
-        log.warn("OTP for {}: {}", toEmail, otp);
+        log.info("Sending OTP to: {}", toEmail);
+        log.info("OTP: {}", otp);
         
         if (sendGridApiKey == null || sendGridApiKey.isEmpty()) {
             log.error("SendGrid API key not configured");
@@ -54,12 +51,12 @@ public class EmailService {
             Response response = sg.api(request);
             
             if (response.getStatusCode() >= 200 && response.getStatusCode() < 300) {
-                log.info("OTP sent successfully to: {}", toEmail);
+                log.info("OTP sent successfully via SendGrid to: {}", toEmail);
             } else {
-                log.error("SendGrid error: {}", response.getBody());
+                log.error("SendGrid error code {}: {}", response.getStatusCode(), response.getBody());
             }
         } catch (Exception e) {
-            log.error("Failed to send OTP: {}", e.getMessage());
+            log.error("Failed to send OTP via SendGrid: {}", e.getMessage(), e);
         }
     }
 
