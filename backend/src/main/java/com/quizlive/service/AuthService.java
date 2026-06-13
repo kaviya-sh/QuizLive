@@ -119,20 +119,29 @@ public class AuthService {
 
     @Transactional
     public String forgotPassword(String email) {
+        log.info("Forgot password request for email: {}", email);
+        
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> ApiException.notFound("No account found with this email address"));
+                .orElseThrow(() -> {
+                    log.error("No account found with email: {}", email);
+                    return ApiException.notFound("No account found with this email address");
+                });
 
         String otp = String.valueOf(100000 + new Random().nextInt(900000));
+        log.info("Generated OTP for {}: {}", email, otp);
 
         user.setOtp(otp);
         user.setOtpGeneratedTime(LocalDateTime.now());
         userRepository.save(user);
+        log.info("OTP saved to database for: {}", email);
 
         try {
             emailService.sendOtp(email, otp);
+            log.info("OTP sent successfully to: {}", email);
             return "OTP sent successfully to your email";
         } catch (Exception e) {
-            throw ApiException.badRequest("Failed to send OTP email. Please try again later.");
+            log.error("Failed to send OTP email to {}: {}", email, e.getMessage(), e);
+            throw ApiException.badRequest("Failed to send OTP email: " + e.getMessage() + ". Please try again or contact support.");
         }
     }
 

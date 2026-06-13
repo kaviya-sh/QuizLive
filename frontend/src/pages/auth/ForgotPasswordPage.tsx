@@ -51,15 +51,25 @@ export const ForgotPasswordPage = () => {
     setLoading(true);
 
     try {
-      await authApi.forgotPassword(email);
+      const response = await authApi.forgotPassword(email);
+      console.log('OTP Response:', response);
       toast.success('OTP sent to your email! Please check your inbox.');
       setStep('otp');
       setTimer(300);
       setCanResend(false);
     } catch (error: any) {
       console.error('Forgot password error:', error);
-      const errorMessage = error.response?.data?.message || error.message || 'Failed to send OTP. Please try again.';
-      toast.error(errorMessage);
+      console.error('Error response:', error.response);
+      
+      let errorMessage = 'Failed to send OTP. Please try again.';
+      
+      if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
+      toast.error(errorMessage, { duration: 6000 });
     } finally {
       setLoading(false);
     }
