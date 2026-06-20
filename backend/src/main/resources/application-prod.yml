@@ -8,12 +8,14 @@ spring:
     password: npg_Wd59yJgvZpXT
     driver-class-name: org.postgresql.Driver
     hikari:
-      maximum-pool-size: 5
-      minimum-idle: 2
-      connection-timeout: 20000
-      idle-timeout: 300000
-      max-lifetime: 600000
+      maximum-pool-size: 10
+      minimum-idle: 3
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
       leak-detection-threshold: 60000
+      validation-timeout: 5000
+      connection-test-query: SELECT 1
 
   jpa:
     hibernate:
@@ -36,7 +38,8 @@ spring:
       password: gQAAAAAAATG7AAIgcDJlZWU3ODliZjRjNDA0MjM4OTg2YjU2NjM1MjBjMWE3Ng
       ssl:
         enabled: true
-      timeout: 60000ms
+      timeout: 10000ms
+      connect-timeout: 5000ms
 
   mail:
     host: smtp.gmail.com

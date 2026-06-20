@@ -60,9 +60,8 @@ public class SecurityConfig {
     
     @Bean
     public PasswordEncoder passwordEncoder() {
-        // Use strength 8 for faster authentication (default is 10)
-        // This reduces login time from ~2-3s to ~0.5s
-        // Strength 8 is still secure (256 rounds = 2^8)
-        return new BCryptPasswordEncoder(8);
+        // Use strength 10 (default) for production security
+        // This ensures consistent password hashing
+        return new BCryptPasswordEncoder(10);
     }
 }

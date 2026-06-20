@@ -78,16 +78,28 @@ public class AuthService {
     
     @Transactional(readOnly = true)
     public AuthResponse login(LoginRequest request, HttpServletResponse response) {
+        log.info("Login attempt for email: {}", request.getEmail());
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> ApiException.unauthorized("Invalid credentials"));
+                .orElseThrow(() -> {
+                    log.warn("User not found: {}", request.getEmail());
+                    return ApiException.unauthorized("Invalid credentials");
+                });
         
         if (user.getDeleted()) {
+            log.warn("Deleted account login attempt: {}", request.getEmail());
             throw ApiException.unauthorized("Account is disabled");
         }
         
-        if (!passwordEncoder.matches(request.getPassword(), user.getPasswordHash())) {
+        log.debug("Validating password for user: {}", request.getEmail());
+        boolean passwordMatches = passwordEncoder.matches(request.getPassword(), user.getPasswordHash());
+        log.debug("Password match result: {}", passwordMatches);
+        
+        if (!passwordMatches) {
+            log.warn("Invalid password for user: {}", request.getEmail());
             throw ApiException.unauthorized("Invalid credentials");
         }
+        
+        log.info("Login successful for user: {}", request.getEmail());
         
         String accessToken = jwtUtil.generateAccessToken(user.getId(), user.getEmail(), user.getRole());
         String refreshToken = jwtUtil.generateRefreshToken(user.getId());
