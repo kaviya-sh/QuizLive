@@ -150,13 +150,14 @@ public class AuthService {
 
     @Transactional
     public String forgotPassword(String email) {
-        User user = userRepository.findByEmail(email)
+        String normalizedEmail = email.trim().toLowerCase();
+        User user = userRepository.findByEmail(normalizedEmail)
                 .orElseThrow(() -> ApiException.notFound("No account found with this email address"));
 
         String otp = String.valueOf(100000 + new Random().nextInt(900000));
         log.info("========================================");
         log.info("FORGOT PASSWORD REQUEST");
-        log.info("Email: {}", email);
+        log.info("Email: {}", normalizedEmail);
         log.info("Generated OTP: {}", otp);
         log.info("========================================");
 
@@ -164,14 +165,15 @@ public class AuthService {
         user.setOtpGeneratedTime(LocalDateTime.now());
         userRepository.save(user);
 
-        emailService.sendOtp(email, otp);
+        emailService.sendOtp(normalizedEmail, otp);
         
         return "OTP sent successfully. Check server logs if not received.";
     }
 
     @Transactional(readOnly = true)
     public String verifyOtp(String email, String otp) {
-        User user = userRepository.findByEmail(email)
+        String normalizedEmail = email.trim().toLowerCase();
+        User user = userRepository.findByEmail(normalizedEmail)
                 .orElseThrow(() -> ApiException.notFound("User not found"));
 
         if (user.getOtp() == null || !user.getOtp().equals(otp)) {
@@ -187,7 +189,8 @@ public class AuthService {
 
     @Transactional
     public String resetPassword(String email, String otp, String newPassword) {
-        User user = userRepository.findByEmail(email)
+        String normalizedEmail = email.trim().toLowerCase();
+        User user = userRepository.findByEmail(normalizedEmail)
                 .orElseThrow(() -> ApiException.notFound("User not found"));
 
         if (user.getOtp() == null || !user.getOtp().equals(otp)) {
@@ -198,12 +201,17 @@ public class AuthService {
             throw ApiException.badRequest("OTP expired");
         }
 
-        user.setPasswordHash(passwordEncoder.encode(newPassword));
+        updateUserPassword(user, newPassword);
         user.setOtp(null);
         user.setOtpGeneratedTime(null);
         userRepository.save(user);
 
         return "Password reset successful";
+    }
+    
+    private void updateUserPassword(User user, String newPassword) {
+        String newHash = passwordEncoder.encode(newPassword);
+        userRepository.updatePasswordHash(user.getId(), newHash);
     }
     
     public String getGoogleAuthUrl(String role) {
@@ -221,7 +229,7 @@ public class AuthService {
         String accessToken = exchangeCodeForToken(code);
         Map<String, Object> userInfo = getUserInfo(accessToken);
         
-        String email = (String) userInfo.get("email");
+        String email = ((String) userInfo.get("email")).trim().toLowerCase();
         String displayName = (String) userInfo.get("name");
         String avatarUrl = (String) userInfo.get("picture");
         String role = state != null ? state : "ROLE_PARTICIPANT";

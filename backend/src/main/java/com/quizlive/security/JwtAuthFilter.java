@@ -43,14 +43,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                     User user = userRepository.findById(userId).orElse(null);
                     
                     if (user != null && !user.getDeleted()) {
-                        // Ensure role has ROLE_ prefix for Spring Security
                         String role = user.getRole();
                         if (role != null && !role.startsWith("ROLE_")) {
                             role = "ROLE_" + role;
                         }
-                        
-                        System.out.println("User role from DB: " + user.getRole());
-                        System.out.println("Authority being set: " + role);
                         
                         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                                 user,
@@ -61,8 +57,16 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                         SecurityContextHolder.getContext().setAuthentication(authentication);
                     }
                 }
+            } catch (io.jsonwebtoken.ExpiredJwtException e) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentType("application/json");
+                response.getWriter().write("{\"error\":\"Token expired\",\"message\":\"Your session has expired. Please login again.\"}");
+                return;
             } catch (Exception e) {
-                // Invalid token, continue without authentication
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentType("application/json");
+                response.getWriter().write("{\"error\":\"Invalid token\",\"message\":\"Authentication failed. Please login again.\"}");
+                return;
             }
         }
         
