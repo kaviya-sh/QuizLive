@@ -6,6 +6,7 @@ import com.quizlive.entity.User;
 import com.quizlive.service.QuizService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/quizzes")
 @RequiredArgsConstructor
+@Slf4j
 public class QuizController {
     
     private final QuizService quizService;
@@ -29,8 +31,14 @@ public class QuizController {
     @PostMapping
     public ResponseEntity<QuizDTO> createQuiz(@Valid @RequestBody CreateQuizRequest request,
                                               @AuthenticationPrincipal User user) {
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(quizService.createQuiz(request, user.getId()));
+        try {
+            log.info("Creating quiz for user: {}", user.getEmail());
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(quizService.createQuiz(request, user.getId()));
+        } catch (Exception e) {
+            log.error("Error creating quiz", e);
+            throw e;
+        }
     }
     
     @GetMapping("/{id}")

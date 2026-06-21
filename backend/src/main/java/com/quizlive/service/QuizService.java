@@ -6,6 +6,7 @@ import com.quizlive.entity.*;
 import com.quizlive.exception.ApiException;
 import com.quizlive.repository.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class QuizService {
     
     private final QuizRepository quizRepository;
@@ -24,55 +26,67 @@ public class QuizService {
     
     @Transactional
     public QuizDTO createQuiz(CreateQuizRequest request, UUID hostId) {
-        User host = userRepository.findById(hostId)
-                .orElseThrow(() -> ApiException.notFound("Host not found"));
-        
-        Quiz quiz = Quiz.builder()
-                .host(host)
-                .title(request.getTitle())
-                .description(request.getDescription())
-                .category(request.getCategory())
-                .coverImageUrl(request.getCoverImageUrl())
-                .language(request.getLanguage())
-                .status("DRAFT")
-                .questions(new ArrayList<>())
-                .deleted(false)
-                .build();
-        
-        if (request.getQuestions() != null && !request.getQuestions().isEmpty()) {
-            for (CreateQuizRequest.QuestionRequest qReq : request.getQuestions()) {
-                Question question = Question.builder()
-                        .quiz(quiz)
-                        .type(qReq.getType())
-                        .text(qReq.getText())
-                        .imageUrl(qReq.getImageUrl())
-                        .timeLimitSeconds(qReq.getTimeLimitSeconds())
-                        .points(qReq.getPoints())
-                        .speedBonusEnabled(qReq.getSpeedBonusEnabled())
-                        .orderIndex(qReq.getOrderIndex())
-                        .options(new ArrayList<>())
-                        .build();
-                
-                if (qReq.getOptions() != null && !qReq.getOptions().isEmpty()) {
-                    for (CreateQuizRequest.OptionRequest oReq : qReq.getOptions()) {
-                        if (oReq.getText() != null && !oReq.getText().trim().isEmpty()) {
-                            Option option = Option.builder()
-                                    .question(question)
-                                    .text(oReq.getText())
-                                    .isCorrect(oReq.getIsCorrect())
-                                    .orderIndex(oReq.getOrderIndex())
-                                    .build();
-                            question.getOptions().add(option);
+        try {
+            log.info("Creating quiz - Title: {}, Questions: {}", request.getTitle(), 
+                request.getQuestions() != null ? request.getQuestions().size() : 0);
+            
+            User host = userRepository.findById(hostId)
+                    .orElseThrow(() -> ApiException.notFound("Host not found"));
+            
+            Quiz quiz = Quiz.builder()
+                    .host(host)
+                    .title(request.getTitle())
+                    .description(request.getDescription())
+                    .category(request.getCategory())
+                    .coverImageUrl(request.getCoverImageUrl())
+                    .language(request.getLanguage())
+                    .status("DRAFT")
+                    .questions(new ArrayList<>())
+                    .deleted(false)
+                    .build();
+            
+            if (request.getQuestions() != null && !request.getQuestions().isEmpty()) {
+                for (CreateQuizRequest.QuestionRequest qReq : request.getQuestions()) {
+                    log.debug("Adding question: {}, Options: {}", qReq.getText(), 
+                        qReq.getOptions() != null ? qReq.getOptions().size() : 0);
+                    
+                    Question question = Question.builder()
+                            .quiz(quiz)
+                            .type(qReq.getType())
+                            .text(qReq.getText())
+                            .imageUrl(qReq.getImageUrl())
+                            .timeLimitSeconds(qReq.getTimeLimitSeconds())
+                            .points(qReq.getPoints())
+                            .speedBonusEnabled(qReq.getSpeedBonusEnabled())
+                            .orderIndex(qReq.getOrderIndex())
+                            .options(new ArrayList<>())
+                            .build();
+                    
+                    if (qReq.getOptions() != null && !qReq.getOptions().isEmpty()) {
+                        for (CreateQuizRequest.OptionRequest oReq : qReq.getOptions()) {
+                            if (oReq.getText() != null && !oReq.getText().trim().isEmpty()) {
+                                Option option = Option.builder()
+                                        .question(question)
+                                        .text(oReq.getText())
+                                        .isCorrect(oReq.getIsCorrect())
+                                        .orderIndex(oReq.getOrderIndex())
+                                        .build();
+                                question.getOptions().add(option);
+                            }
                         }
                     }
+                    
+                    quiz.getQuestions().add(question);
                 }
-                
-                quiz.getQuestions().add(question);
             }
+            
+            quiz = quizRepository.save(quiz);
+            log.info("Quiz created successfully - ID: {}", quiz.getId());
+            return mapToDTO(quiz);
+        } catch (Exception e) {
+            log.error("Error creating quiz", e);
+            throw e;
         }
-        
-        quiz = quizRepository.save(quiz);
-        return mapToDTO(quiz);
     }
     
     @Transactional(readOnly = true)
