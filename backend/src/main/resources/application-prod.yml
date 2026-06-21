@@ -1,6 +1,9 @@
 spring:
   application:
     name: quizlive
+  main:
+    lazy-initialization: false
+    allow-bean-definition-overriding: false
 
   datasource:
     url: jdbc:postgresql://ep-noisy-brook-aplc69tm.c-7.us-east-1.aws.neon.tech/quizlive_prod?sslmode=require
@@ -30,6 +33,8 @@ spring:
     enabled: true
     baseline-on-migrate: true
     locations: classpath:db/migration
+    connect-retries: 3
+    connect-retries-interval: 1
 
   data:
     redis:
@@ -38,8 +43,12 @@ spring:
       password: gQAAAAAAATG7AAIgcDJlZWU3ODliZjRjNDA0MjM4OTg2YjU2NjM1MjBjMWE3Ng
       ssl:
         enabled: true
-      timeout: 10000ms
-      connect-timeout: 5000ms
+      timeout: 3000ms
+      connect-timeout: 3000ms
+      lettuce:
+        shutdown-timeout: 0ms
+        pool:
+          enabled: false
 
   mail:
     host: smtp.gmail.com
@@ -68,6 +77,11 @@ server:
   port: ${PORT:8081}
   error:
     include-message: always
+  tomcat:
+    connection-timeout: 20000
+    threads:
+      max: 10
+      min-spare: 2
 
 jwt:
   secret: the08BskLMecJqFDgVBe%z1euMKeVy3SJqZ6Q781%+m09$1g4fL1CWWXCrPYK6$%fGmkTqTaocvlrGooS8vLQQ==
