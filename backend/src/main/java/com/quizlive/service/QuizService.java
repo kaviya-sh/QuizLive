@@ -39,9 +39,7 @@ public class QuizService {
                 .deleted(false)
                 .build();
         
-        quiz = quizRepository.save(quiz);
-        
-        if (request.getQuestions() != null) {
+        if (request.getQuestions() != null && !request.getQuestions().isEmpty()) {
             for (CreateQuizRequest.QuestionRequest qReq : request.getQuestions()) {
                 Question question = Question.builder()
                         .quiz(quiz)
@@ -55,17 +53,17 @@ public class QuizService {
                         .options(new ArrayList<>())
                         .build();
                 
-                question = questionRepository.save(question);
-                
-                if (qReq.getOptions() != null) {
+                if (qReq.getOptions() != null && !qReq.getOptions().isEmpty()) {
                     for (CreateQuizRequest.OptionRequest oReq : qReq.getOptions()) {
-                        Option option = Option.builder()
-                                .question(question)
-                                .text(oReq.getText())
-                                .isCorrect(oReq.getIsCorrect())
-                                .orderIndex(oReq.getOrderIndex())
-                                .build();
-                        question.getOptions().add(option);
+                        if (oReq.getText() != null && !oReq.getText().trim().isEmpty()) {
+                            Option option = Option.builder()
+                                    .question(question)
+                                    .text(oReq.getText())
+                                    .isCorrect(oReq.getIsCorrect())
+                                    .orderIndex(oReq.getOrderIndex())
+                                    .build();
+                            question.getOptions().add(option);
+                        }
                     }
                 }
                 
@@ -73,6 +71,7 @@ public class QuizService {
             }
         }
         
+        quiz = quizRepository.save(quiz);
         return mapToDTO(quiz);
     }
     
@@ -112,19 +111,15 @@ public class QuizService {
             throw ApiException.unauthorized("Not authorized to update this quiz");
         }
         
-        // Update quiz metadata
         quiz.setTitle(request.getTitle());
         quiz.setDescription(request.getDescription());
         quiz.setCategory(request.getCategory());
         quiz.setCoverImageUrl(request.getCoverImageUrl());
         quiz.setLanguage(request.getLanguage());
         
-        // Delete all existing questions and their options (cascade will handle options)
-        questionRepository.deleteAll(quiz.getQuestions());
         quiz.getQuestions().clear();
         
-        // Add new questions from request
-        if (request.getQuestions() != null) {
+        if (request.getQuestions() != null && !request.getQuestions().isEmpty()) {
             for (CreateQuizRequest.QuestionRequest qReq : request.getQuestions()) {
                 Question question = Question.builder()
                         .quiz(quiz)
@@ -138,17 +133,17 @@ public class QuizService {
                         .options(new ArrayList<>())
                         .build();
                 
-                question = questionRepository.save(question);
-                
-                if (qReq.getOptions() != null) {
+                if (qReq.getOptions() != null && !qReq.getOptions().isEmpty()) {
                     for (CreateQuizRequest.OptionRequest oReq : qReq.getOptions()) {
-                        Option option = Option.builder()
-                                .question(question)
-                                .text(oReq.getText())
-                                .isCorrect(oReq.getIsCorrect())
-                                .orderIndex(oReq.getOrderIndex())
-                                .build();
-                        question.getOptions().add(option);
+                        if (oReq.getText() != null && !oReq.getText().trim().isEmpty()) {
+                            Option option = Option.builder()
+                                    .question(question)
+                                    .text(oReq.getText())
+                                    .isCorrect(oReq.getIsCorrect())
+                                    .orderIndex(oReq.getOrderIndex())
+                                    .build();
+                            question.getOptions().add(option);
+                        }
                     }
                 }
                 
