@@ -51,13 +51,20 @@ public class AuthService {
     
     @Transactional
     public AuthResponse register(RegisterRequest request, HttpServletResponse response) {
-        if (userRepository.existsByEmail(request.getEmail())) {
+        String email = request.getEmail().trim().toLowerCase();
+        
+        if (userRepository.existsByEmail(email)) {
             throw ApiException.conflict("Email already registered");
         }
         
+        log.info("Registering new user: {}", email);
+        
+        String passwordHash = passwordEncoder.encode(request.getPassword());
+        log.info("Password hash generated with prefix: {}", passwordHash.substring(0, 20));
+        
         User user = User.builder()
-                .email(request.getEmail())
-                .passwordHash(passwordEncoder.encode(request.getPassword()))
+                .email(email)
+                .passwordHash(passwordHash)
                 .displayName(request.getDisplayName())
                 .role(request.getRole())
                 .deleted(false)
@@ -78,28 +85,38 @@ public class AuthService {
     
     @Transactional(readOnly = true)
     public AuthResponse login(LoginRequest request, HttpServletResponse response) {
-        log.info("Login attempt for email: {}", request.getEmail());
-        User user = userRepository.findByEmail(request.getEmail())
+        String email = request.getEmail().trim().toLowerCase();
+        String password = request.getPassword();
+        
+        log.info("=== LOGIN ATTEMPT ===");
+        log.info("Email: {}", email);
+        
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> {
-                    log.warn("User not found: {}", request.getEmail());
+                    log.error("User not found: {}", email);
                     return ApiException.unauthorized("Invalid credentials");
                 });
         
+        log.info("User found - ID: {}, Role: {}, Deleted: {}", user.getId(), user.getRole(), user.getDeleted());
+        
         if (user.getDeleted()) {
-            log.warn("Deleted account login attempt: {}", request.getEmail());
+            log.error("Account is deleted: {}", email);
             throw ApiException.unauthorized("Account is disabled");
         }
         
-        log.debug("Validating password for user: {}", request.getEmail());
-        boolean passwordMatches = passwordEncoder.matches(request.getPassword(), user.getPasswordHash());
-        log.debug("Password match result: {}", passwordMatches);
+        String storedHash = user.getPasswordHash();
+        log.info("Hash prefix: {}", storedHash.substring(0, Math.min(20, storedHash.length())));
+        
+        boolean passwordMatches = passwordEncoder.matches(password, storedHash);
+        log.info("Password verification result: {}", passwordMatches);
         
         if (!passwordMatches) {
-            log.warn("Invalid password for user: {}", request.getEmail());
+            log.error("Password mismatch for user: {}", email);
             throw ApiException.unauthorized("Invalid credentials");
         }
         
-        log.info("Login successful for user: {}", request.getEmail());
+        log.info("LOGIN SUCCESS for: {}", email);
+        log.info("===================");
         
         String accessToken = jwtUtil.generateAccessToken(user.getId(), user.getEmail(), user.getRole());
         String refreshToken = jwtUtil.generateRefreshToken(user.getId());
