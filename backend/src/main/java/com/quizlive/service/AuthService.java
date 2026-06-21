@@ -201,17 +201,12 @@ public class AuthService {
             throw ApiException.badRequest("OTP expired");
         }
 
-        updateUserPassword(user, newPassword);
+        user.setPasswordHash(passwordEncoder.encode(newPassword));
         user.setOtp(null);
         user.setOtpGeneratedTime(null);
         userRepository.save(user);
 
         return "Password reset successful";
-    }
-    
-    private void updateUserPassword(User user, String newPassword) {
-        String newHash = passwordEncoder.encode(newPassword);
-        userRepository.updatePasswordHash(user.getId(), newHash);
     }
     
     public String getGoogleAuthUrl(String role) {
