@@ -443,12 +443,26 @@ public class SessionService {
     @Transactional(readOnly = true)
     public List<SessionDTO> getSessionHistory(UUID hostId) {
         List<QuizSession> sessions = sessionRepository.findByHostIdOrderByCreatedAtDesc(hostId);
+        
+        // Initialize all lazy collections
+        sessions.forEach(session -> {
+            session.getQuiz().getQuestions().size();
+            session.getQuiz().getQuestions().forEach(q -> q.getOptions().size());
+        });
+        
         return sessions.stream().map(this::mapToDTO).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
     public List<SessionDTO> getActiveSessionsByHost(UUID hostId) {
         List<QuizSession> sessions = sessionRepository.findByHostIdAndStatusIn(hostId, List.of("WAITING", "ACTIVE"));
+        
+        // Initialize all lazy collections
+        sessions.forEach(session -> {
+            session.getQuiz().getQuestions().size();
+            session.getQuiz().getQuestions().forEach(q -> q.getOptions().size());
+        });
+        
         return sessions.stream()
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
