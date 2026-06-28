@@ -28,6 +28,11 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: false
+        jdbc:
+          batch_size: 20
+        order_inserts: true
+        order_updates: true
+    open-in-view: false
 
   flyway:
     enabled: true
@@ -108,6 +113,8 @@ websocket:
 app:
   frontend:
     url: ${FRONTEND_URL:http://localhost:5173}
+  cookie:
+    secure: ${COOKIE_SECURE:true}
   google:
     client-id: ${GOOGLE_CLIENT_ID:}
     client-secret: ${GOOGLE_CLIENT_SECRET:}

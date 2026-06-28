@@ -11,4 +11,10 @@ services:
         value: prod
       - key: PORT
         value: 8081
+      - key: FRONTEND_URL
+        value: https://sparklo-in.vercel.app
+      - key: CORS_ALLOWED_ORIGINS
+        value: https://sparklo-in.vercel.app
+      - key: WEBSOCKET_ALLOWED_ORIGINS
+        value: https://sparklo-in.vercel.app
     healthCheckPath: /actuator/health

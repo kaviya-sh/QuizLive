@@ -60,8 +60,6 @@ public class SecurityConfig {
     
     @Bean
     public PasswordEncoder passwordEncoder() {
-        // Use strength 10 (default) for production security
-        // This ensures consistent password hashing
-        return new BCryptPasswordEncoder(10);
+        return new BCryptPasswordEncoder();
     }
 }

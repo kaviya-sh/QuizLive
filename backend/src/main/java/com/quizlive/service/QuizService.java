@@ -45,6 +45,10 @@ public class QuizService {
                     .deleted(false)
                     .build();
             
+            // Save quiz first to get ID
+            quiz = quizRepository.save(quiz);
+            log.info("Quiz saved with ID: {}", quiz.getId());
+            
             if (request.getQuestions() != null && !request.getQuestions().isEmpty()) {
                 for (CreateQuizRequest.QuestionRequest qReq : request.getQuestions()) {
                     log.debug("Adding question: {}, Options: {}", qReq.getText(), 
@@ -78,14 +82,18 @@ public class QuizService {
                     
                     quiz.getQuestions().add(question);
                 }
+                
+                // Save again with questions
+                quiz = quizRepository.saveAndFlush(quiz);
+                log.info("Quiz with questions saved successfully");
             }
             
-            quiz = quizRepository.save(quiz);
-            log.info("Quiz created successfully - ID: {}", quiz.getId());
+            log.info("Quiz created successfully - ID: {}, Questions: {}", 
+                quiz.getId(), quiz.getQuestions().size());
             return mapToDTO(quiz);
         } catch (Exception e) {
-            log.error("Error creating quiz", e);
-            throw e;
+            log.error("Error creating quiz: {}", e.getMessage(), e);
+            throw ApiException.internal("Failed to create quiz: " + e.getMessage());
         }
     }
     
@@ -118,55 +126,65 @@ public class QuizService {
     
     @Transactional
     public QuizDTO updateQuiz(UUID quizId, CreateQuizRequest request, UUID hostId) {
-        Quiz quiz = quizRepository.findById(quizId)
-                .orElseThrow(() -> ApiException.notFound("Quiz not found"));
-        
-        if (!quiz.getHost().getId().equals(hostId)) {
-            throw ApiException.unauthorized("Not authorized to update this quiz");
-        }
-        
-        quiz.setTitle(request.getTitle());
-        quiz.setDescription(request.getDescription());
-        quiz.setCategory(request.getCategory());
-        quiz.setCoverImageUrl(request.getCoverImageUrl());
-        quiz.setLanguage(request.getLanguage());
-        
-        quiz.getQuestions().clear();
-        
-        if (request.getQuestions() != null && !request.getQuestions().isEmpty()) {
-            for (CreateQuizRequest.QuestionRequest qReq : request.getQuestions()) {
-                Question question = Question.builder()
-                        .quiz(quiz)
-                        .type(qReq.getType())
-                        .text(qReq.getText())
-                        .imageUrl(qReq.getImageUrl())
-                        .timeLimitSeconds(qReq.getTimeLimitSeconds())
-                        .points(qReq.getPoints())
-                        .speedBonusEnabled(qReq.getSpeedBonusEnabled())
-                        .orderIndex(qReq.getOrderIndex())
-                        .options(new ArrayList<>())
-                        .build();
-                
-                if (qReq.getOptions() != null && !qReq.getOptions().isEmpty()) {
-                    for (CreateQuizRequest.OptionRequest oReq : qReq.getOptions()) {
-                        if (oReq.getText() != null && !oReq.getText().trim().isEmpty()) {
-                            Option option = Option.builder()
-                                    .question(question)
-                                    .text(oReq.getText())
-                                    .isCorrect(oReq.getIsCorrect())
-                                    .orderIndex(oReq.getOrderIndex())
-                                    .build();
-                            question.getOptions().add(option);
+        try {
+            log.info("Updating quiz: {}", quizId);
+            
+            Quiz quiz = quizRepository.findById(quizId)
+                    .orElseThrow(() -> ApiException.notFound("Quiz not found"));
+            
+            if (!quiz.getHost().getId().equals(hostId)) {
+                throw ApiException.unauthorized("Not authorized to update this quiz");
+            }
+            
+            quiz.setTitle(request.getTitle());
+            quiz.setDescription(request.getDescription());
+            quiz.setCategory(request.getCategory());
+            quiz.setCoverImageUrl(request.getCoverImageUrl());
+            quiz.setLanguage(request.getLanguage());
+            
+            // Clear existing questions
+            quiz.getQuestions().clear();
+            quizRepository.saveAndFlush(quiz);
+            
+            if (request.getQuestions() != null && !request.getQuestions().isEmpty()) {
+                for (CreateQuizRequest.QuestionRequest qReq : request.getQuestions()) {
+                    Question question = Question.builder()
+                            .quiz(quiz)
+                            .type(qReq.getType())
+                            .text(qReq.getText())
+                            .imageUrl(qReq.getImageUrl())
+                            .timeLimitSeconds(qReq.getTimeLimitSeconds())
+                            .points(qReq.getPoints())
+                            .speedBonusEnabled(qReq.getSpeedBonusEnabled())
+                            .orderIndex(qReq.getOrderIndex())
+                            .options(new ArrayList<>())
+                            .build();
+                    
+                    if (qReq.getOptions() != null && !qReq.getOptions().isEmpty()) {
+                        for (CreateQuizRequest.OptionRequest oReq : qReq.getOptions()) {
+                            if (oReq.getText() != null && !oReq.getText().trim().isEmpty()) {
+                                Option option = Option.builder()
+                                        .question(question)
+                                        .text(oReq.getText())
+                                        .isCorrect(oReq.getIsCorrect())
+                                        .orderIndex(oReq.getOrderIndex())
+                                        .build();
+                                question.getOptions().add(option);
+                            }
                         }
                     }
+                    
+                    quiz.getQuestions().add(question);
                 }
-                
-                quiz.getQuestions().add(question);
             }
+            
+            quiz = quizRepository.saveAndFlush(quiz);
+            log.info("Quiz updated successfully");
+            return mapToDTO(quiz);
+        } catch (Exception e) {
+            log.error("Error updating quiz: {}", e.getMessage(), e);
+            throw ApiException.internal("Failed to update quiz: " + e.getMessage());
         }
-        
-        quiz = quizRepository.save(quiz);
-        return mapToDTO(quiz);
     }
     
     @Transactional

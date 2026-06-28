@@ -129,13 +129,25 @@ public class AuthService {
                 .build();
     }
     
+    @Value("${app.cookie.secure:true}")
+    private boolean cookieSecure;
+    
     private void setRefreshTokenCookie(HttpServletResponse response, String refreshToken) {
         Cookie cookie = new Cookie("refreshToken", refreshToken);
         cookie.setHttpOnly(true);
-        cookie.setSecure(false); // Set to true in production with HTTPS
+        cookie.setSecure(cookieSecure);
         cookie.setPath("/");
-        cookie.setMaxAge(7 * 24 * 60 * 60); // 7 days
+        cookie.setMaxAge(7 * 24 * 60 * 60);
         response.addCookie(cookie);
+        
+        // Also set via header for proper SameSite support
+        String cookieValue = String.format(
+            "refreshToken=%s; Path=/; Max-Age=%d; HttpOnly; %s SameSite=None",
+            refreshToken,
+            7 * 24 * 60 * 60,
+            cookieSecure ? "Secure;" : ""
+        );
+        response.addHeader("Set-Cookie", cookieValue);
     }
     
     private AuthResponse.UserDTO mapToUserDTO(User user) {

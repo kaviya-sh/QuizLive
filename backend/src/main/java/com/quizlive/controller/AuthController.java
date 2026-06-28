@@ -7,6 +7,7 @@ import com.quizlive.dto.request.ResetPasswordRequest;
 import com.quizlive.dto.response.AuthResponse;
 import com.quizlive.service.AuthService;
 import com.quizlive.service.PasswordResetService;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -40,11 +41,16 @@ public class AuthController {
     
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(HttpServletResponse response) {
-        jakarta.servlet.http.Cookie cookie = new jakarta.servlet.http.Cookie("refreshToken", null);
+        Cookie cookie = new Cookie("refreshToken", "");
         cookie.setHttpOnly(true);
         cookie.setPath("/");
         cookie.setMaxAge(0);
         response.addCookie(cookie);
+        
+        // Also clear via header
+        response.addHeader("Set-Cookie", 
+            "refreshToken=; Path=/; Max-Age=0; HttpOnly; Secure; SameSite=None");
+        
         return ResponseEntity.noContent().build();
     }
     
