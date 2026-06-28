@@ -93,7 +93,7 @@ public class QuizService {
             return mapToDTO(quiz);
         } catch (Exception e) {
             log.error("Error creating quiz: {}", e.getMessage(), e);
-            throw ApiException.internal("Failed to create quiz: " + e.getMessage());
+            throw new RuntimeException("Failed to create quiz: " + e.getMessage(), e);
         }
     }
     
@@ -183,7 +183,7 @@ public class QuizService {
             return mapToDTO(quiz);
         } catch (Exception e) {
             log.error("Error updating quiz: {}", e.getMessage(), e);
-            throw ApiException.internal("Failed to update quiz: " + e.getMessage());
+            throw new RuntimeException("Failed to update quiz: " + e.getMessage(), e);
         }
     }
     
