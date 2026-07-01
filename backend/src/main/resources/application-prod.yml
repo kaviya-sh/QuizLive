@@ -43,11 +43,7 @@ spring:
 
   data:
     redis:
-      host: rational-swan-78267.upstash.io
-      port: 6379
-      password: gQAAAAAAATG7AAIgcDJlZWU3ODliZjRjNDA0MjM4OTg2YjU2NjM1MjBjMWE3Ng
-      ssl:
-        enabled: true
+      url: ${REDIS_URL:rediss://:gQAAAAAAATG7AAIgcDJlZWU3ODliZjRjNDA0MjM4OTg2YjU2NjM1MjBjMWE3Ng@rational-swan-78267.upstash.io:6379}
       timeout: 3000ms
       connect-timeout: 3000ms
       lettuce:

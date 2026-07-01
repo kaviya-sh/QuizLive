@@ -107,7 +107,11 @@ public class SessionService {
         session = sessionRepository.save(session);
         
         // Update Redis
-        redisTemplate.opsForHash().put("session:" + roomCode, "status", "ACTIVE");
+        try {
+            redisTemplate.opsForHash().put("session:" + roomCode, "status", "ACTIVE");
+        } catch (Exception e) {
+            System.err.println("Redis error (startSession): " + e.getMessage());
+        }
         
         // Push first question via WebSocket
         Quiz quiz = quizRepository.findById(session.getQuiz().getId())
@@ -150,7 +154,7 @@ public class SessionService {
             session = sessionRepository.save(session);
 
             // Clear Redis
-            redisTemplate.delete("session:" + roomCode);
+            try { redisTemplate.delete("session:" + roomCode); } catch (Exception e) { System.err.println("Redis error: " + e.getMessage()); }
 
             // Notify participants that quiz has ended - send this FIRST
             messagingTemplate.convertAndSend("/topic/session/" + roomCode + "/state",
@@ -167,7 +171,11 @@ public class SessionService {
         session = sessionRepository.save(session);
         
         // Update Redis
-        redisTemplate.opsForHash().put("session:" + roomCode, "currentQuestionIndex", nextIndex);
+        try {
+            redisTemplate.opsForHash().put("session:" + roomCode, "currentQuestionIndex", nextIndex);
+        } catch (Exception e) {
+            System.err.println("Redis error (nextQuestion): " + e.getMessage());
+        }
         
         // Push next question
         Question nextQuestion = quiz.getQuestions().get(nextIndex);
@@ -188,7 +196,7 @@ public class SessionService {
         sessionRepository.save(session);
 
         // Clear Redis
-        redisTemplate.delete("session:" + roomCode);
+        try { redisTemplate.delete("session:" + roomCode); } catch (Exception e) { System.err.println("Redis error: " + e.getMessage()); }
 
         // Notify participants that quiz has ended
         messagingTemplate.convertAndSend("/topic/session/" + roomCode + "/state",
