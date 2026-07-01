@@ -102,12 +102,10 @@ export const QuizBuilderPage = () => {
 
     if (!quiz.title.trim()) {
       newErrors.title = 'Please enter a quiz title';
-      error('Please enter a quiz title');
     }
 
     if (!quiz.description?.trim()) {
       newErrors.description = 'Please enter a quiz description';
-      error('Please enter a quiz description');
     }
 
     if (!quiz.questions || quiz.questions.length === 0) {
@@ -123,58 +121,44 @@ export const QuizBuilderPage = () => {
       
       if (!question.text.trim()) {
         questionErrors[i] = { ...questionErrors[i], text: 'Please enter the question text' };
-        error(`Question ${i + 1}: Please enter the question text`);
       }
 
       const filledOptions = question.options?.filter(opt => opt.text.trim()) || [];
       if (filledOptions.length < 2) {
         questionErrors[i] = { ...questionErrors[i], options: 'Please provide at least two answer options' };
-        error(`Question ${i + 1}: Please provide at least two answer options`);
       }
 
       const hasCorrectAnswer = question.options?.some(opt => opt.isCorrect) || false;
       if (!hasCorrectAnswer) {
         questionErrors[i] = { ...questionErrors[i], correctAnswer: 'Please mark one option as the correct answer' };
-        error(`Question ${i + 1}: Please mark one option as the correct answer`);
       }
     }
 
     if (Object.keys(questionErrors).length > 0) {
       newErrors.questions = questionErrors;
+      const firstBadQ = Object.keys(questionErrors)[0];
+      error(`Question ${parseInt(firstBadQ) + 1}: ${Object.values(questionErrors[parseInt(firstBadQ)])[0]}`);
     }
 
     if (Object.keys(newErrors).length > 0) {
+      if (newErrors.title) error(newErrors.title);
+      else if (newErrors.description) error(newErrors.description);
       setErrors(newErrors);
       return;
     }
 
     setSaving(true);
     try {
-      console.log('=== SAVING QUIZ ===');
-      console.log('Mode:', isEditMode ? 'UPDATE' : 'CREATE');
-      console.log('Quiz ID:', id);
-      console.log('Quiz data being sent:', JSON.stringify(quiz, null, 2));
-      
       if (isEditMode) {
-        const response = await quizApi.updateQuiz(id!, quiz);
-        console.log('=== UPDATE RESPONSE ===');
-        console.log('Status:', response.status);
-        console.log('Data:', JSON.stringify(response.data, null, 2));
+        await quizApi.updateQuiz(id!, quiz);
         success('Quiz updated successfully!');
         setTimeout(() => navigate('/dashboard', { state: { refresh: true } }), 500);
       } else {
-        const response = await quizApi.createQuiz(quiz);
-        console.log('=== CREATE RESPONSE ===');
-        console.log('Status:', response.status);
-        console.log('Data:', JSON.stringify(response.data, null, 2));
+        await quizApi.createQuiz(quiz);
         success('Quiz created successfully!');
         setTimeout(() => navigate('/dashboard', { state: { refresh: true } }), 500);
       }
     } catch (err: any) {
-      console.error('=== SAVE ERROR ===');
-      console.error('Error:', err);
-      console.error('Response:', err.response);
-      console.error('Response data:', err.response?.data);
       const errorMessage = err.response?.data?.message || err.response?.data?.error || err.message || 'Failed to save quiz';
       error(errorMessage);
     } finally {
@@ -184,15 +168,17 @@ export const QuizBuilderPage = () => {
 
   const selectedQuestion = selectedQuestionIndex !== null ? quiz.questions?.[selectedQuestionIndex] : null;
 
-  // Check if current question is valid for enabling save button
-  const isCurrentQuestionValid = () => {
-    if (!selectedQuestion) return false;
-    
-    const hasQuestionText = selectedQuestion.text.trim().length > 0;
-    const filledOptions = selectedQuestion.options?.filter(opt => opt.text.trim()) || [];
-    const hasTwoOptions = filledOptions.length >= 2;
-    
-    return hasQuestionText && hasTwoOptions;
+  // Check if quiz is saveable (title + at least one valid question)
+  const isQuizSaveable = () => {
+    if (!quiz.title.trim() || !quiz.description?.trim()) return false;
+    if (!quiz.questions || quiz.questions.length === 0) return false;
+    return quiz.questions.every(q => {
+      const hasText = q.text.trim().length > 0;
+      const filledOptions = q.options?.filter(opt => opt.text.trim()) || [];
+      const hasTwoOptions = filledOptions.length >= 2;
+      const hasCorrect = q.options?.some(opt => opt.isCorrect) || false;
+      return hasText && hasTwoOptions && hasCorrect;
+    });
   };
 
   if (loading) {
@@ -224,6 +210,14 @@ export const QuizBuilderPage = () => {
                 </div>
               </div>
             </div>
+            <button
+              onClick={handleSave}
+              disabled={saving || !isQuizSaveable()}
+              className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-semibold py-2 px-5 rounded-lg transition-all shadow-sm hover:shadow-md inline-flex items-center gap-1.5 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <Save className="w-4 h-4" />
+              {saving ? 'Saving...' : isEditMode ? 'Update Quiz' : 'Save Quiz'}
+            </button>
           </div>
         </div>
       </header>
@@ -356,14 +350,6 @@ export const QuizBuilderPage = () => {
                     <label className="block text-sm font-bold text-gray-900">
                       Question {selectedQuestionIndex! + 1}
                     </label>
-                    <button
-                      onClick={handleSave}
-                      disabled={saving || !isCurrentQuestionValid()}
-                      className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-semibold py-2 px-4 rounded-lg transition-all shadow-sm hover:shadow-md inline-flex items-center gap-1.5 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      <Save className="w-4 h-4" />
-                      {saving ? 'Saving...' : isEditMode ? 'Update Quiz' : 'Save Quiz'}
-                    </button>
                   </div>
                   <textarea
                     value={selectedQuestion.text}

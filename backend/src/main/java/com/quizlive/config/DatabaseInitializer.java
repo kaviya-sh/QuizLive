@@ -81,11 +81,18 @@ public class DatabaseInitializer {
             userRepository.save(user);
             log.info("✓ Created user: {} ({})", email, role);
         } else {
-            // Always update password to ensure BCrypt strength consistency
-            user.setPasswordHash(passwordHash);
-            user.setDeleted(false);
-            userRepository.save(user);
-            log.info("✓ Updated password for: {} ({})", email, role);
+            // Only fix if hash is invalid (not a valid BCrypt hash)
+            String existingHash = user.getPasswordHash();
+            boolean isValidBcrypt = existingHash != null && 
+                (existingHash.startsWith("$2a$") || existingHash.startsWith("$2b$"));
+            if (!isValidBcrypt) {
+                user.setPasswordHash(passwordHash);
+                user.setDeleted(false);
+                userRepository.save(user);
+                log.info("✓ Fixed invalid hash for: {} ({})", email, role);
+            } else {
+                log.info("✓ User already exists with valid hash: {} ({})", email, role);
+            }
         }
     }
 }
