@@ -9,8 +9,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.List;
-
 @Configuration
 @RequiredArgsConstructor
 @Slf4j
@@ -22,19 +20,33 @@ public class DatabaseInitializer {
     @Bean
     public CommandLineRunner initDatabase() {
         return args -> {
-            // Always reset demo users with a fresh BCrypt hash on startup
             String demoHash = passwordEncoder.encode("demo123");
 
-            List.of("demo@sparklo.in", "demohost@sparklo.in").forEach(email -> {
-                userRepository.findByEmail(email).ifPresent(user -> {
-                    user.setPasswordHash(demoHash);
-                    user.setDeleted(false);
-                    userRepository.save(user);
-                    log.info("Reset demo password for: {}", email);
-                });
-            });
+            upsertDemoUser("demo@sparklo.in",     "Demo Participant", "ROLE_PARTICIPANT", demoHash);
+            upsertDemoUser("demohost@sparklo.in", "Demo Host",        "ROLE_HOST",        demoHash);
 
-            log.info("Demo login - Email: demo@sparklo.in | Password: demo123");
+            log.info("Demo login - Email: demo@sparklo.in / demohost@sparklo.in | Password: demo123");
         };
+    }
+
+    private void upsertDemoUser(String email, String displayName, String role, String hash) {
+        userRepository.findByEmail(email).ifPresentOrElse(
+            user -> {
+                user.setPasswordHash(hash);
+                user.setDeleted(false);
+                userRepository.save(user);
+                log.info("Reset demo password for: {}", email);
+            },
+            () -> {
+                userRepository.save(User.builder()
+                    .email(email)
+                    .displayName(displayName)
+                    .role(role)
+                    .passwordHash(hash)
+                    .deleted(false)
+                    .build());
+                log.info("Created demo user: {}", email);
+            }
+        );
     }
 }

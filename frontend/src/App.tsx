@@ -9,6 +9,7 @@ import { useAuthStore } from './store/authStore';
 import { lazy, Suspense, useEffect } from 'react';
 import { NotificationContainer } from './components/ui/NotificationContainer';
 import { useNotificationStore } from './store/notificationStore';
+import { useKeepAlive } from './hooks/useKeepAlive';
 import toast from 'react-hot-toast';
 
 const DashboardPage            = lazy(() => import('./pages/host/DashboardPage').then(m => ({ default: m.DashboardPage })));
@@ -40,6 +41,7 @@ const Spinner = () => (
 function App() {
   const { isAuthenticated, user, _hydrated, checkSessionExpiry, clearAuth } = useAuthStore();
   const { notifications, removeNotification } = useNotificationStore();
+  useKeepAlive();
 
   // Wait for localStorage rehydration before rendering any routes.
   // Without this, isAuthenticated() returns false on first render and
