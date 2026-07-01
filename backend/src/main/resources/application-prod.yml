@@ -6,9 +6,9 @@ spring:
     allow-bean-definition-overriding: false
 
   datasource:
-    url: jdbc:postgresql://ep-noisy-brook-aplc69tm.c-7.us-east-1.aws.neon.tech/quizlive_prod?sslmode=require
-    username: neondb_owner
-    password: npg_Wd59yJgvZpXT
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://ep-noisy-brook-aplc69tm.c-7.us-east-1.aws.neon.tech/quizlive_prod?sslmode=require}
+    username: ${SPRING_DATASOURCE_USERNAME:neondb_owner}
+    password: ${SPRING_DATASOURCE_PASSWORD:npg_Wd59yJgvZpXT}
     driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: 10
