@@ -21,51 +21,66 @@ export const LoginPage = () => {
   const [forgotEmail, setForgotEmail] = useState('');
   const [sendingReset, setSendingReset] = useState(false);
 
-  const handleDemoLogin = (demoRole: 'HOST' | 'PARTICIPANT') => {
-    if (demoRole === 'HOST') {
-      setEmail('demohost@sparklo.in');
-      setPassword('demo123');
-      setRole('HOST');
-    } else {
-      setEmail('demo@sparklo.in');
-      setPassword('demo123');
-      setRole('PARTICIPANT');
-    }
-  };
+  const handleDemoLogin = async (demoRole: 'HOST' | 'PARTICIPANT') => {
+    const demoEmail = demoRole === 'HOST' ? 'demohost@sparklo.in' : 'demo@sparklo.in';
+    const demoPassword = 'demo123';
+    const demoRoleValue = demoRole;
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+    setEmail(demoEmail);
+    setPassword(demoPassword);
+    setRole(demoRoleValue);
     setLoading(true);
     setEmailError('');
     setPasswordError('');
     setRoleError('');
 
     try {
-      const { data } = await authApi.login({ email, password });
-      
-      // Check if the role matches
+      const { data } = await authApi.login({ email: demoEmail, password: demoPassword });
+      setAuth(data.user, data.accessToken);
+      success('Welcome back!');
+      navigate(data.user.role === 'ROLE_HOST' ? '/dashboard' : '/participant/dashboard');
+    } catch (err: any) {
+      const status = err.response?.status;
+      if (status === 500 || status === 503 || !err.response) {
+        setPasswordError('Server error. Please try again in a moment.');
+      } else {
+        setPasswordError('Invalid email or password.');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+    setEmailError('');
+    setPasswordError('');
+    setRoleError('');
+
+    const formData = new FormData(e.currentTarget);
+    const emailValue = (formData.get('email') as string)?.trim().toLowerCase() || email.trim().toLowerCase();
+    const passwordValue = formData.get('password') as string || password;
+
+    try {
+      const { data } = await authApi.login({ email: emailValue, password: passwordValue });
       const userRole = data.user.role === 'ROLE_HOST' ? 'HOST' : 'PARTICIPANT';
       if (userRole !== role) {
         setRoleError(`Invalid role. You are registered as ${userRole === 'HOST' ? 'Host' : 'Participant'}`);
         setLoading(false);
         return;
       }
-      
       setAuth(data.user, data.accessToken);
       success('Welcome back!');
       navigate(data.user.role === 'ROLE_HOST' ? '/dashboard' : '/participant/dashboard');
     } catch (error: any) {
       const status = error.response?.status;
       const errorMessage = error.response?.data?.message || '';
-
       if (status === 500 || status === 503 || !error.response) {
         setPasswordError('Server error. Please try again in a moment.');
       } else if (errorMessage.toLowerCase().includes('disabled')) {
         setEmailError('This account is disabled.');
-      } else if (
-        errorMessage.toLowerCase().includes('user not found') ||
-        errorMessage.toLowerCase().includes('user does not exist')
-      ) {
+      } else if (errorMessage.toLowerCase().includes('user not found') || errorMessage.toLowerCase().includes('user does not exist')) {
         setEmailError('No account found with this email.');
       } else {
         setPasswordError('Invalid email or password.');
@@ -139,6 +154,7 @@ export const LoginPage = () => {
                     </div>
                     <input
                       id="email"
+                      name="email"
                       type="email"
                       required
                       value={email}
@@ -167,6 +183,7 @@ export const LoginPage = () => {
                     </div>
                     <input
                       id="password"
+                      name="password"
                       type={showPassword ? 'text' : 'password'}
                       required
                       value={password}
