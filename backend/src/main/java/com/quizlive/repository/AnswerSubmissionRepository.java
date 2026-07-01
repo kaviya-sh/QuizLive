@@ -12,6 +12,8 @@ public interface AnswerSubmissionRepository extends JpaRepository<AnswerSubmissi
     List<AnswerSubmission> findBySessionId(UUID sessionId);
     
     List<AnswerSubmission> findByParticipantId(UUID participantId);
+
+    List<AnswerSubmission> findBySessionIdAndQuestionId(UUID sessionId, UUID questionId);
     
     @Query("SELECT COUNT(a) FROM AnswerSubmission a WHERE a.session.id = :sessionId AND a.question.id = :questionId")
     long countBySessionIdAndQuestionId(UUID sessionId, UUID questionId);

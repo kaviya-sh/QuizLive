@@ -62,6 +62,7 @@ export const HostPanelPage = () => {
     if (msg.type === 'QUESTION_START' && msg.startTime) {
       console.log('Question started with startTime:', msg.startTime);
       setQuestionStartTimeSynced(msg.startTime);
+      setAnswerDistribution({});
       loadSession();
     }
     
@@ -90,6 +91,12 @@ export const HostPanelPage = () => {
       loadSession();
     }
     
+    if (msg.type === 'DISTRIBUTION') {
+      const { type: _, ...counts } = msg;
+      setAnswerDistribution(counts);
+      return;
+    }
+
     const hasUuidKeys = Object.keys(msg).some(k => k.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i));
     if (hasUuidKeys && !msg.type) {
       console.log('Distribution update received:', msg);

@@ -98,16 +98,22 @@ public class ScoringEngine {
         
         answerRepository.save(submission);
         
-        // Update answer distribution in Redis and broadcast to host
+        // Build in-memory distribution from DB and broadcast to host
         try {
-            String distributionKey = "distribution:" + payload.getSessionId() + ":" + payload.getQuestionId();
-            redisTemplate.opsForHash().increment(distributionKey, payload.getOptionId().toString(), 1);
-            Map<Object, Object> rawDistribution = redisTemplate.opsForHash().entries(distributionKey);
+            List<AnswerSubmission> submissions = answerRepository.findBySessionIdAndQuestionId(
+                    session.getId(), question.getId());
             Map<String, Object> distribution = new HashMap<>();
-            rawDistribution.forEach((k, v) -> distribution.put(k.toString(), Integer.parseInt(v.toString())));
+            distribution.put("type", "DISTRIBUTION");
+            question.getOptions().forEach(o -> distribution.put(o.getId().toString(), 0));
+            submissions.forEach(s -> {
+                if (s.getOption() != null) {
+                    String key = s.getOption().getId().toString();
+                    distribution.merge(key, 1, (a, b) -> (int) a + (int) b);
+                }
+            });
             messagingTemplate.convertAndSend("/topic/session/" + session.getRoomCode() + "/distribution", distribution);
         } catch (Exception e) {
-            System.err.println("Redis error (distribution): " + e.getMessage());
+            System.err.println("Distribution broadcast error: " + e.getMessage());
         }
         
         return Map.of(
