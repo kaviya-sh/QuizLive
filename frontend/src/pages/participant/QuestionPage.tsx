@@ -113,7 +113,7 @@ export const QuestionPage = () => {
     
     setSelectedOption(optionId);
     setAnswered(true);
-    sendAnswer(question!.id, optionId);
+    sendAnswer(question!.id, optionId, (question as any).startTime || Date.now());
   };
 
   const CHART_COLORS = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444'];

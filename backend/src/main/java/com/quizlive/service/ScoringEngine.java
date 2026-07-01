@@ -98,16 +98,17 @@ public class ScoringEngine {
         
         answerRepository.save(submission);
         
-        // Update answer distribution in Redis
-        String distributionKey = "distribution:" + payload.getSessionId() + ":" + payload.getQuestionId();
-        redisTemplate.opsForHash().increment(distributionKey, payload.getOptionId().toString(), 1);
-        
-        // Broadcast answer distribution to host
-        Map<Object, Object> rawDistribution = redisTemplate.opsForHash().entries(distributionKey);
-        Map<String, Object> distribution = new HashMap<>();
-        rawDistribution.forEach((k, v) -> distribution.put(k.toString(), Integer.parseInt(v.toString())));
-        
-        messagingTemplate.convertAndSend("/topic/session/" + session.getRoomCode() + "/distribution", distribution);
+        // Update answer distribution in Redis and broadcast to host
+        try {
+            String distributionKey = "distribution:" + payload.getSessionId() + ":" + payload.getQuestionId();
+            redisTemplate.opsForHash().increment(distributionKey, payload.getOptionId().toString(), 1);
+            Map<Object, Object> rawDistribution = redisTemplate.opsForHash().entries(distributionKey);
+            Map<String, Object> distribution = new HashMap<>();
+            rawDistribution.forEach((k, v) -> distribution.put(k.toString(), Integer.parseInt(v.toString())));
+            messagingTemplate.convertAndSend("/topic/session/" + session.getRoomCode() + "/distribution", distribution);
+        } catch (Exception e) {
+            System.err.println("Redis error (distribution): " + e.getMessage());
+        }
         
         return Map.of(
                 "isCorrect", isCorrect,

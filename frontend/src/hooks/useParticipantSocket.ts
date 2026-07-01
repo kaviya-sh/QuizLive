@@ -132,7 +132,7 @@ export const useParticipantSocket = (roomCode: string, onMessage: (message: any)
     };
   }, [roomCode]); // Only depend on roomCode, not onMessage
 
-  const sendAnswer = (questionId: string, optionId: string) => {
+  const sendAnswer = (questionId: string, optionId: string, startTime: number) => {
     if (clientRef.current?.connected) {
       const participantId = sessionStorage.getItem('participantId');
       const sessionId = sessionStorage.getItem('sessionId');
@@ -145,7 +145,7 @@ export const useParticipantSocket = (roomCode: string, onMessage: (message: any)
           participantId,
           questionId,
           optionId,
-          answeredAtMs: Date.now(),
+          answeredAtMs: Date.now() - startTime,
         }),
       });
     } else {
