@@ -17,4 +17,12 @@ services:
         value: https://sparklo-in.vercel.app
       - key: WEBSOCKET_ALLOWED_ORIGINS
         value: https://sparklo-in.vercel.app
+      - key: DATABASE_URL
+        value: jdbc:postgresql://ep-noisy-brook-aplc69tm.c-7.us-east-1.aws.neon.tech/quizlive_prod?sslmode=require
+      - key: SPRING_DATASOURCE_URL
+        value: jdbc:postgresql://ep-noisy-brook-aplc69tm.c-7.us-east-1.aws.neon.tech/quizlive_prod?sslmode=require
+      - key: SPRING_DATASOURCE_USERNAME
+        value: neondb_owner
+      - key: SPRING_DATASOURCE_PASSWORD
+        value: npg_Wd59yJgvZpXT
     healthCheckPath: /actuator/health
