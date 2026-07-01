@@ -21,7 +21,7 @@ client.interceptors.request.use((config) => {
 client.interceptors.response.use(
   (response) => response,
   async (error) => {
-    if (error.response?.status === 401 && !error.config.url?.includes('/api/auth/login')) {
+    if (error.response?.status === 401 && !error.config.url?.includes('/auth/login')) {
       useAuthStore.getState().clearAuth();
       window.location.href = '/login';
     }

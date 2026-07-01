@@ -34,29 +34,29 @@ export interface ResetPasswordRequest {
 
 export const authApi = {
   register: (data: RegisterRequest) =>
-    client.post<AuthResponse>('/api/auth/register', data),
+    client.post<AuthResponse>('/auth/register', data),
 
   login: (data: LoginRequest) =>
-    client.post<AuthResponse>('/api/auth/login', data),
+    client.post<AuthResponse>('/auth/login', data),
 
   logout: () =>
-    client.post('/api/auth/logout'),
+    client.post('/auth/logout'),
 
   refresh: () =>
-    client.post<{ accessToken: string }>('/api/auth/refresh'),
+    client.post<{ accessToken: string }>('/auth/refresh'),
 
   forgotPassword: (email: string) =>
-    client.post<{ message: string }>('/api/auth/forgot-password', null, {
+    client.post<{ message: string }>('/auth/forgot-password', null, {
       params: { email }
     }),
 
   verifyOtp: (email: string, otp: string) =>
-    client.post<{ message: string }>('/api/auth/verify-otp', null, {
+    client.post<{ message: string }>('/auth/verify-otp', null, {
       params: { email, otp }
     }),
 
   resetPassword: (email: string, otp: string, newPassword: string) =>
-    client.post<{ message: string }>('/api/auth/reset-password', null, {
+    client.post<{ message: string }>('/auth/reset-password', null, {
       params: { email, otp, newPassword }
     }),
 };
