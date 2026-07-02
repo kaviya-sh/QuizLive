@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @RequiredArgsConstructor
@@ -15,34 +14,33 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class DatabaseInitializer {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+
+    // Verified BCrypt(10) hash for 'demo123' — do NOT re-encode on startup
+    private static final String DEMO_HASH = "$2a$10$ZtiYs7oR1i571MkFyrGKwOOhqWm0VgC91nYFMbeXvIPyp5aOXtoL2";
 
     @Bean
     public CommandLineRunner initDatabase() {
         return args -> {
-            String demoHash = passwordEncoder.encode("demo123");
-
-            upsertDemoUser("demo@sparklo.in",     "Demo Participant", "ROLE_PARTICIPANT", demoHash);
-            upsertDemoUser("demohost@sparklo.in", "Demo Host",        "ROLE_HOST",        demoHash);
-
-            log.info("Demo login - Email: demo@sparklo.in / demohost@sparklo.in | Password: demo123");
+            upsertDemoUser("demo@sparklo.in",     "Demo Participant", "ROLE_PARTICIPANT");
+            upsertDemoUser("demohost@sparklo.in", "Demo Host",        "ROLE_HOST");
+            log.info("Demo login — demo@sparklo.in / demohost@sparklo.in | password: demo123");
         };
     }
 
-    private void upsertDemoUser(String email, String displayName, String role, String hash) {
+    private void upsertDemoUser(String email, String displayName, String role) {
         userRepository.findByEmail(email).ifPresentOrElse(
             user -> {
-                user.setPasswordHash(hash);
+                user.setPasswordHash(DEMO_HASH);
                 user.setDeleted(false);
                 userRepository.save(user);
-                log.info("Reset demo password for: {}", email);
+                log.info("Reset demo user: {}", email);
             },
             () -> {
                 userRepository.save(User.builder()
                     .email(email)
                     .displayName(displayName)
                     .role(role)
-                    .passwordHash(hash)
+                    .passwordHash(DEMO_HASH)
                     .deleted(false)
                     .build());
                 log.info("Created demo user: {}", email);
