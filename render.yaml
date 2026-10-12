@@ -25,4 +25,6 @@ services:
         value: neondb_owner
       - key: SPRING_DATASOURCE_PASSWORD
         value: npg_Wd59yJgvZpXT
+      - key: REDIS_URL
+        value: rediss://:gQAAAAAAATG7AAIgcDJlZWU3ODliZjRjNDA0MjM4OTg2YjU2NjM1MjBjMWE3Ng@rational-swan-78267.upstash.io:6379
     healthCheckPath: /actuator/health
