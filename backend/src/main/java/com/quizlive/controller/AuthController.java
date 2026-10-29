@@ -7,7 +7,11 @@ import com.quizlive.dto.request.ResetPasswordRequest;
 import com.quizlive.dto.response.AuthResponse;
 import com.quizlive.service.AuthService;
 import com.quizlive.service.PasswordResetService;
+import com.quizlive.repository.UserRepository;
+import com.quizlive.security.JwtUtil;
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +20,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -25,6 +31,8 @@ public class AuthController {
     
     private final AuthService authService;
     private final PasswordResetService passwordResetService;
+    private final JwtUtil jwtUtil;
+    private final UserRepository userRepository;
     
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request,
@@ -39,6 +47,36 @@ public class AuthController {
         return ResponseEntity.ok(authService.login(request, response));
     }
     
+    @PostMapping("/refresh")
+    public ResponseEntity<?> refresh(HttpServletRequest request, HttpServletResponse response) {
+        String refreshToken = null;
+        if (request.getCookies() != null) {
+            refreshToken = Arrays.stream(request.getCookies())
+                .filter(c -> "refreshToken".equals(c.getName()))
+                .map(Cookie::getValue)
+                .findFirst().orElse(null);
+        }
+        if (refreshToken == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "No refresh token"));
+        }
+        try {
+            Claims claims = jwtUtil.validateToken(refreshToken);
+            if (!"REFRESH".equals(claims.get("type", String.class))) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "Invalid token type"));
+            }
+            UUID userId = UUID.fromString(claims.getSubject());
+            var user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+            if (user.getDeleted()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "Account disabled"));
+            }
+            String newAccessToken = jwtUtil.generateAccessToken(user.getId(), user.getEmail(), user.getRole());
+            return ResponseEntity.ok(Map.of("accessToken", newAccessToken));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "Invalid or expired refresh token"));
+        }
+    }
+
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(HttpServletResponse response) {
         Cookie cookie = new Cookie("refreshToken", "");

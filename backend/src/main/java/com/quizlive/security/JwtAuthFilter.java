@@ -58,15 +58,16 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                     }
                 }
             } catch (io.jsonwebtoken.ExpiredJwtException e) {
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.setContentType("application/json");
-                response.getWriter().write("{\"error\":\"Token expired\",\"message\":\"Your session has expired. Please login again.\"}");
-                return;
+                // Only block if the route requires auth; let Spring Security handle public routes
+                String path = request.getRequestURI();
+                if (!path.startsWith("/api/auth/") && !path.startsWith("/api/health") && !path.startsWith("/ws")) {
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.setContentType("application/json");
+                    response.getWriter().write("{\"error\":\"Token expired\",\"message\":\"Your session has expired. Please login again.\"}");
+                    return;
+                }
             } catch (Exception e) {
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.setContentType("application/json");
-                response.getWriter().write("{\"error\":\"Invalid token\",\"message\":\"Authentication failed. Please login again.\"}");
-                return;
+                // Ignore invalid tokens on public routes
             }
         }
         
